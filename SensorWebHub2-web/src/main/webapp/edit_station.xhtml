@@ -1,0 +1,120 @@
+<f:view
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        contentType="text/html">
+
+    <h:head>
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{editStationBean.init}" />
+        </f:metadata>
+
+    </h:head>
+
+    <h:body>
+        <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/>
+
+        <p:toolbar >
+            <f:facet name="left"   >
+                <p:graphicImage value="/images/title_sensorwebhub.9.png" height="30px" />
+            </f:facet>
+
+            <f:facet name="right"   >
+                <h:outputText value="#{loginBean.username}" />
+
+                <p:spacer width="20px" height="30px" />
+                <p:commandLink action="#{loginBean.logout}">
+                    <p:graphicImage value="images/logout.png" width="30px" height="30px"/>
+                </p:commandLink>
+            </f:facet>
+        </p:toolbar>
+
+        <p:growl  id="growl" showDetail="true" sticky="true"  />
+
+        <h:form>
+            <p:panel id="panel" header="Nuova Stazione" style="margin-bottom:10px;">
+
+                <h:panelGrid columns="2" cellpadding="5">
+                    <p:outputLabel value="ID Stazione: #{editStationBean.stationName}" />
+
+
+                    <p:outputLabel for="description" value="Nome Esteso: " />
+                    <p:inputText id="description"  value="#{editStationBean.stationDescr}" />
+
+                    <p:outputLabel value="Macro Tipologia: #{editStationBean.selectedMacroType}"/>
+
+
+                    <p:outputLabel value="Specializzazione: " for="stationTypeIn" />
+                    <p:selectOneMenu  id="stationTypeIn" value="#{editStationBean.selectedStationType}">
+                        <f:selectItem itemLabel="Select Type" itemValue="-1" noSelectionOption="false" />
+                        <f:selectItems value="#{editStationBean.stationTypes}" />
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="latIn" value="Latitudine:" />
+                    <p:inputText id="latIn" required="false"  value="#{editStationBean.lat}" >
+                        <f:validateDoubleRange minimum="-90.00" maximum="90.00" />
+                    </p:inputText>
+
+                    <p:outputLabel for="longIn" value="Longitudine:"/>
+
+                    <p:inputText id="longIn"  value="#{editStationBean.lon}" >
+                        <f:validateDoubleRange minimum="-180.00" maximum="180.00" />
+                    </p:inputText>
+
+
+                    <p:outputLabel for="responsabile" value="Responsabile: *" />
+                    <p:inputText id="responsabile"  value="#{editStationBean.stationResponsible}"/>
+
+                    <p:outputLabel for="responsabileEmail" value="Email: *" />
+                    <p:inputText id="responsabileEmail"  value="#{editStationBean.stationEmail}"/>
+
+                    <p:outputLabel for="dataregistrazione" value="Data di registrazione: *" />
+                    <p:calendar id="dataregistrazione"  value="#{editStationBean.stationDataReg}"/>
+
+                    <p:outputLabel for="metaDescr" value="Metadati: *" />
+                    <p:editor id="metaDescr" value="#{editStationBean.metaDescr}"/>
+
+
+                </h:panelGrid>
+            </p:panel>
+
+
+
+        </h:form>
+
+        <p:commandButton value="Cancel" action="#{editStationBean.doCancella}"  />
+
+        <p:commandButton value="Edit Sensors" id="nextId"  action="#{editStationBean.nextStep}"
+                         icon="ui-icon-check" update=":growl" />
+
+        <p:commandButton value="Save" id="saveId"  action="#{editStationBean.saveStation}"
+                         icon="ui-icon-check" update=":growl" />
+        <p:toolbar >
+            <f:facet name="left">
+                <p:graphicImage value="/images/logo_ibimet_blank.png" height="146px" />
+            </f:facet>
+        </p:toolbar>
+
+        <p:toolbar style="background-color:#ffffff;color:#ffffff;">
+            <f:facet name="left">
+                <p:commandLink onclick="PF('questoDlg').show();">
+                    <h:outputText value="Credits" style="color:#FF7012;" />
+                </p:commandLink>
+            </f:facet>
+        </p:toolbar>
+
+        <p:dialog modal="true" widgetVar="statusDialog" header="Attendere..."
+                  draggable="false" closable="false">
+            <p:graphicImage value="/images/ajaxloadingbar.gif" />
+        </p:dialog>
+
+
+        <ui:include src="creditDialog.xhtml" />
+
+
+
+    </h:body>
+
+</f:view>

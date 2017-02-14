@@ -1,0 +1,25 @@
+@CHARSET "UTF-8";
+
+h .styleTextCenter {    
+text-align: center;
+
+}
+
+.ui-icon-logout {
+	background-image: url(../images/login.png);
+    height: 35px;
+    width: 35px;
+}
+.bottone {
+    background-image: url(Home_files/bottone_orange.png);
+}
+
+.jqplot-title{
+    color: #FFFFFF;
+}
+.jqplot-xaxis-label{
+    color: #FFFFFF; 
+}
+.jqplot-yaxis-label{
+    color: #FFFFFF;
+}

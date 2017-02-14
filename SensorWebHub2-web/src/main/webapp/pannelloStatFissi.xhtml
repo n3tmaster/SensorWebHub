@@ -1,0 +1,60 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:panel binding="#{pannelloStatTotem}" id="pannelloStatTotem" visible="#{toolbarBean.pST}">
+        <h:form>
+
+            <p:dataTable id="mieiTotemStation002"
+                         var="mStationT2"
+                         value="#{totemStationBean.totemStationListModel}"
+                         binding="#{mieiTotemStation002}"
+                         rowKey="#{mStationT2.id_bike_sensor}"
+                         selection="#{totemStationBean.totemStationSelezionato2}"
+                         paginator="true" rows="5" selectionMode="single">
+
+                <p:ajax event="rowSelect" listener="#{totemDataBean.populateStatistics}"
+                        update=":#{miaTotemTableStatistiche.clientId}" />
+
+                <p:column headerText="Seleziona la stazione"  width="80%">
+                    <h:outputText value="#{mStationT2.descrizione}" />
+                </p:column>
+                <p:column headerText="Status"  width="20%">
+                    <h:outputText value="#{mStationT2.status}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <h:form>
+
+            <p:dataTable id="miaTotemTableStatistiche"
+                         var="datoStatAttrTB" value="#{totemDataBean.datiStat}"
+                         binding="#{miaTotemTableStatistiche}"
+                         scrollable="true"
+                         paginator="true" rows="15"  rowsPerPageTemplate="5,10,15,20,50,100,200">
+
+                <f:facet name="header">
+
+                    <p:commandButton value="Esporta in Excel" ajax="false" disabled="#{loginBean.level5}">
+                        <p:dataExporter type="xls" target="miaTotemTableStatistiche" fileName="datiExported" pageOnly="true" postProcessor="#{totemDataBean.postProcessXLSStat}"/>
+                    </p:commandButton>
+
+                </f:facet>
+                <p:columns value="#{totemDataBean.columnsStat}"
+                           var="columnStatTB" >
+                    <f:facet name="header">
+                        #{columnStatTB.header}
+                    </f:facet>
+
+                    #{datoStatAttrTB[columnStatTB.property]}
+                </p:columns>
+            </p:dataTable>
+
+
+
+        </h:form>
+    </p:panel>
+
+</ui:composition>

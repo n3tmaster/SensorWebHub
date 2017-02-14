@@ -1,0 +1,629 @@
+<f:view
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	contentType="text/html">
+
+    <h:head>
+        <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+	</h:head>
+	
+	<h:body>
+            <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/>  
+              
+            <p:toolbar >  
+                <f:facet name="left"   > 
+                    <p:graphicImage value="/images/title_sensorwebhub.9.png" height="30px" />
+                </f:facet>
+  		 	
+                <f:facet name="right"   > 
+                    
+                    
+                   
+                  <h:outputText value="Benvenuto: #{loginBean.username}" />
+                    <p:spacer width="20px" height="30px" />
+                    <p:commandLink action="#{loginBean.logout}">
+                        <p:graphicImage value="images/logout.png" width="30px" height="30px"/>
+                    </p:commandLink>
+                </f:facet>
+            </p:toolbar>
+	
+            <p:growl  id="growl" showDetail="true" sticky="true"  />  
+		
+            <p:panel style="border:none;">
+                <p:graphicImage value="images/header_rinnovabili.png" height="50px" />
+      
+            </p:panel>
+	  	
+            <p:toolbar style="background-color:#ffffff;color:#ffffff;" >  
+                <f:facet name="left"   > 
+                    
+                    <p:commandLink id="btnSelectBiomasse" 
+                                   action="#{toolbarBean.doSelectBiomasse}"
+		    update=":growl  :#{oggettoMappa.clientId}
+                                   :#{graficiBiomasse.clientId}
+                                   :#{pannelloStatB.clientId}
+                                   :#{pannelloStatF.clientId}
+                                   :#{pannelloStatTotem.clientId} 
+                                   :#{pannelloDati.clientId}
+                                   :#{pannelloDatiFoto.clientId}
+                                   :#{pannelloDatiFisse.clientId} 
+                                   :#{graficiBiomasse.clientId}
+                                   :#{graficiFoto.clientId}
+                                   :#{graficiFisso.clientId} 
+                                   :#{imgBiomasse.clientId}
+                                   :#{imgFotovoltaico.clientId}
+                                    :#{imgStazioni.clientId}" 
+                                    style="width: 90px;"
+                                     >
+                        <p:graphicImage id="imgBiomasse" binding="#{imgBiomasse}" url="#{toolbarBean.doBiomasseURL}" 
+                                        style="border-right-style: dashed; border-right-width: thin; border-right-color:#C8C8C8;   
+                                        background-color: #{toolbarBean.coloreBiomasse};
+                                            width: 80px; height: 70px;padding: 10px;"/>
+                        
+                    </p:commandLink>
+                    <p:commandLink id="btnSelectFotovoltaico" 
+                                   action="#{toolbarBean.doSelectFotovoltaico}"
+                                   update=":growl :#{oggettoMappa.clientId}
+                                    :#{graficiBiomasse.clientId}
+                                    :#{pannelloStatB.clientId}
+                                    :#{pannelloStatF.clientId}
+                                    :#{pannelloStatTotem.clientId} 
+                                    :#{pannelloDati.clientId}
+                                    :#{pannelloDatiFoto.clientId}
+                                    :#{pannelloDatiFisse.clientId} 
+                                    :#{graficiBiomasse.clientId}
+                                    :#{graficiFoto.clientId}
+                                    :#{graficiFisso.clientId} 
+                                    :#{imgBiomasse.clientId}
+                                    :#{imgFotovoltaico.clientId}
+                                    :#{imgStazioni.clientId}"
+                                    style="width: 90px;"
+                                     >
+                        <p:graphicImage id="imgFotovoltaico" binding="#{imgFotovoltaico}" url="#{toolbarBean.doFotovoltaicoURL}" 
+                                        style="border-right-style: dashed; border-right-width: thin; border-right-color:#C8C8C8;   
+                                        background-color: #{toolbarBean.coloreFotovoltaico};
+                                            width: 80px; height: 70px;padding: 10px;"/>
+                        
+                    </p:commandLink>
+                    
+                     <p:commandLink id="btnStazioni" 
+                                   action="#{toolbarBean.doStazioni2}"
+		    update=":growl :#{oggettoMappa.clientId}
+                                    :#{graficiBiomasse.clientId}
+                                    :#{pannelloStatB.clientId}
+                                    :#{pannelloStatF.clientId}
+                                    :#{pannelloStatTotem.clientId} 
+                                    :#{pannelloDati.clientId}
+                                    :#{pannelloDatiFoto.clientId}
+                                    :#{pannelloDatiFisse.clientId} 
+                                    :#{graficiBiomasse.clientId}
+                                    :#{graficiFoto.clientId}
+                                    :#{graficiFisso.clientId} 
+                                    :#{imgBiomasse.clientId}
+                                    :#{imgFotovoltaico.clientId}
+                                    :#{imgStazioni.clientId}
+                                    "
+                    >
+                        <h:graphicImage id="imgStazioni" binding="#{imgStazioni}" url="#{toolbarBean.doStazioniURL}" 
+                                        style="border-right-color:#C8C8C8;  border-right-style: dashed;  border-right-width: thin; border-spacing: 5px; background-color: #{toolbarBean.coloreStazioni};
+				width: 80px; height: 70px;padding: 10px;
+				 "/>
+                    </p:commandLink>
+                    
+        
+                </f:facet>
+            </p:toolbar>	
+            <p:tabView effect="fade" effectDuration="normal" >  
+             
+                <p:tab id="tabMappe" title="MAPPA">  
+                
+                    <p:commandButton id="updMappa" 
+                            value="Aggiorna la Mappa" 
+                            actionListener="#{mapUrbanBean.popolaUltimiMappa}"  
+                            update=":#{oggettoMappa.clientId} "/>  
+                    
+                    <p:gmap id="oggettoMappa" 
+                            binding="#{oggettoMappa}"
+                            center="#{mapUrbanBean.centerMap}" 
+                            zoom="#{mapUrbanBean.zoomFactor}" 
+                            type="SATELLITE"   
+                        style="width:100%;height:800px"   
+                        navigationControl="true" 
+                        mapTypeControl="true" 
+                        model="#{mapUrbanBean.puntiModel}" >
+                        <p:ajax event="overlaySelect" listener="#{mapUrbanBean.onMarkerSelect}"/>  
+                        <p:gmapInfoWindow id="infoWindow">
+                            <p:outputPanel style="text-align:center;display:block;margin:auto;">  
+                                <h:outputText escape="false" value="#{mapUrbanBean.marker.data}" style="color:black;font-size:small;"/>  <br />  
+                                <h:outputText escape="false" value="#{mapUrbanBean.marker.title}" style="color:black;font-size:small;"/>  
+                            </p:outputPanel>  
+                        </p:gmapInfoWindow>
+                    </p:gmap>
+                   
+                </p:tab>  
+		
+                <p:tab id="tabGrafici" title="GRAFICI" >  
+                     
+                    <p:panel binding="#{pannelloGrafici}" id="pannelloGrafici" >
+                        
+                        <p:panel binding="#{graficiBiomasse}" id="graficiBiomasse" visible="#{toolbarBean.pgB}">
+                         <h:form>
+                                    <p:panelGrid style="width:100%" >  
+                                        <p:row>
+                                            <p:column>
+                                                <p:dataTable id="biomassaStation3" 
+                                                    var="bStation3" 
+                                                    value="#{sweStationBean.sweListModel}"
+                                                    binding="#{biomassaStation3}"	
+                                                    rowKey="#{bStation3.id_swe}" 
+                                                    selection="#{sweStationBean.sweSelezionato3}" 
+                                                    paginator="true" rows="5" 
+                                                    selectionMode="single">  
+                                                    
+                                                 
+                                                    <p:column headerText="Seleziona la stazione">  
+                                                        <h:outputText value="#{bStation3.descrizione}" />  
+                                                    </p:column>  
+                                                </p:dataTable>  
+                                            </p:column>
+
+                                            <p:column rowspan="2">
+                                                <h:outputLabel value="Da:" for="fromCal" /><p:spacer />
+                                                <p:calendar  id="fromCal" value="#{chartBean.dateB}" />
+                                                <h:outputLabel value="A:" for="toCal" /><p:spacer />
+                                                <p:calendar  id="toCal" value="#{chartBean.dateB2}" />
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+
+                                    <p:commandButton id="updChartT" value="Visualizza" 
+                                                     actionListener="#{chartBean.popolaBiomasse}"  
+                                        update=":#{graficoModel.clientId} :#{graficoTemp.clientId} 
+                                            :#{graficoCo2.clientId} :#{graficoUmidita.clientId} :#{graficoOzono.clientId}"/>  
+                                </h:form>
+                   
+                        </p:panel>
+                            
+                       <p:panel binding="#{graficiFoto}" id="graficiFoto" visible="#{toolbarBean.pgF}">
+                         <h:form>
+                                    <p:panelGrid style="width:100%" >  
+                                        <p:row>
+                                            <p:column>
+                                                <p:dataTable id="fotoStation3" 
+                                                    var="fStation3" 
+                                                    value="#{fotoBean.fotoListModel}"
+                                                    binding="#{fotoStation3}"	
+                                                    rowKey="#{fStation3.id_fotovoltaic}" 
+                                                    selection="#{fotoBean.fotoSelezionato3}" 
+                                                    paginator="true" rows="5" 
+                                                    selectionMode="single">  
+                                                    
+                                                 
+                                                    <p:column headerText="Seleziona Impianto">  
+                                                        <h:outputText value="#{fStation3.descrizione}" />  
+                                                    </p:column>  
+                                                </p:dataTable>  
+                                            </p:column>
+
+                                            <p:column rowspan="2">
+                                                <h:outputLabel value="Da:" for="fromCal" /><p:spacer />
+                                                <p:calendar  id="fromCal" value="#{chartBean.dateT}" />
+                                                <h:outputLabel value="A:" for="toCal" /><p:spacer />
+                                                <p:calendar  id="toCal" value="#{chartBean.dateT2}" />
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+
+                                    <p:commandButton id="updChartT2" value="Visualizza" 
+                                                     actionListener="#{chartBean.popolaFotovoltaico}"  
+                                        update=":#{graficoModel.clientId} :#{graficoTemp.clientId} 
+                                            :#{graficoCo2.clientId} :#{graficoUmidita.clientId} :#{graficoOzono.clientId}"/>  
+                                </h:form>
+                   
+                        </p:panel>
+                        
+                        
+                        <p:panel binding="#{graficiFisso}" id="graficiFisso" visible="#{toolbarBean.pgS}">
+                   
+                            <h:form>
+                                    <p:panelGrid style="width:100%" >  
+                                        <p:row>
+                                            <p:column>
+                                                <p:dataTable id="fissoStation3" 
+                                                    var="mStationT0" 
+                                                    value="#{totemStationBean.totemStationListModel}"
+                                                    binding="#{fissoStation3}"	
+                                                    rowKey="#{mStationT0.id_bike_sensor}" 
+                                                    selection="#{totemStationBean.totemStationSelezionato3}" 
+                                                    paginator="true" rows="5" 
+                                                    selectionMode="single">  
+                                                    
+                                                 
+                                                    <p:column headerText="Seleziona la stazione">  
+                                                        <h:outputText value="#{mStationT0.descrizione}" />  
+                                                    </p:column>  
+                                                </p:dataTable>  
+                                            </p:column>
+
+                                            <p:column rowspan="2">
+                                                <h:outputLabel value="Da:" for="fromCal" /><p:spacer />
+                                                <p:calendar  id="fromCal" value="#{chartBean.dateT}" />
+                                                <h:outputLabel value="A:" for="toCal" /><p:spacer />
+                                                <p:calendar  id="toCal" value="#{chartBean.dateT2}" />
+                                            </p:column>
+                                        </p:row>
+                                    </p:panelGrid>
+
+                                    <p:commandButton id="updChartT" value="Visualizza" 
+                                                     actionListener="#{chartBean.popolaTotem}"  
+                                        update=":#{graficoModel.clientId} :#{graficoTemp.clientId} :#{graficoCo2.clientId} :#{graficoUmidita.clientId} :#{graficoOzono.clientId}"/>  
+                                </h:form>
+                           
+                         </p:panel>
+                        
+                        <p:accordionPanel dynamic="true" cache="true">
+                            <p:tab title="Grafici giornalieri">
+                                <p:chart type="line"  id="graficoModel" model="#{chartBean.model}"  binding="#{graficoModel}"
+                                    style="height:100%;width:100%;" />    
+                            </p:tab>
+                            <p:tab title="Grafico 1">
+                                <p:chart type="line"  id="graficoTemp" model="#{chartBean.model1}"  binding="#{graficoTemp}"
+                                    style="height:500px;width:100%;margin-top:20px" />  
+                            </p:tab>
+                            <p:tab title="Grafico 2">
+                                <p:chart type="line"  id="graficoCo2" model="#{chartBean.model2}"  binding="#{graficoCo2}"
+                                    style="height:500px;width:100%;margin-top:20px" />   
+                            </p:tab>
+                            <p:tab title="Grafico 3">
+                                 <p:chart type="line"  id="graficoUmidita" model="#{chartBean.model3}"  binding="#{graficoUmidita}"
+                                    style="height:500px;width:100%;margin-top:20px" />   
+                            </p:tab>
+                            <p:tab title="Grafico 4">
+                                <p:chart type="line"  id="graficoOzono" model="#{chartBean.model4}"  binding="#{graficoOzono}"
+                                    style="height:500px;width:100%;margin-top:20px" />   
+                            </p:tab>
+                        </p:accordionPanel>
+                        
+                    </p:panel>
+                </p:tab>
+					
+                <p:tab id="tabData" binding="#{tabData}" title="DATI">  
+                    
+                    
+                    <p:panel binding="#{pannelloDatiFisse}" id="pannelloDatiTotem" visible="#{toolbarBean.pdS}">
+                        
+                        
+                   
+                <h:form>
+		    <p:dataTable id="mieiTotemStation001" 
+                        var="mStationT1" 
+                        value="#{totemStationBean.totemStationListModel}"
+                                binding="#{mieiTotemStation001}"	
+                                rowKey="#{mStationT1.id_bike_sensor}" 
+                                selection="#{totemStationBean.totemStationSelezionato}" 
+                                paginator="true" rows="5" selectionMode="single"
+                                >  
+
+                        <p:ajax event="rowSelect" listener="#{totemDataBean.populate}" update=":#{miaDataTableT.clientId}" />
+                        <p:column headerText="Seleziona la stazione">  
+                            <h:outputText value="#{mStationT1.descrizione}" />  
+                        </p:column>  
+                    </p:dataTable>  
+                </h:form>
+                        
+                         
+                <h:form >
+                    
+                     <p:dataTable id="miaDataTableT"  
+                        var="datoAttrT" value="#{totemDataBean.dati}"
+                        binding="#{miaDataTableT}"
+                        scrollable="true"
+                       paginator="true" rows="15"  rowsPerPageTemplate="5,10,15,20,50,100,200"
+                        >  
+                        <f:facet name="header">
+                               <p:commandButton value="Esporta in Excel" ajax="false" disabled="#{loginBean.level5}">
+                                   <p:dataExporter type="xls" target="miaDataTableT" fileName="datiExported" pageOnly="true" postProcessor="#{totemDataBean.postProcessXLS}"/>
+                            </p:commandButton>
+                       
+                        </f:facet>
+                        <p:columns value="#{totemDataBean.columns}"  
+                            var="columnT" >  
+                            <f:facet name="header">  
+                                #{columnT.header}  
+                            </f:facet>  
+
+                            #{datoAttrT[columnT.property]}  
+                        </p:columns>  
+                    </p:dataTable>  
+                    
+                    
+                    
+                  
+                    
+                    
+                </h:form>
+                        </p:panel>
+                    
+                    
+                    <p:panel binding="#{pannelloDati}" id="pannelloDati" visible="#{toolbarBean.pdB}">
+                    <h:form>
+                        <p:dataTable id="biomassaStation1" 
+                            var="mS1" 
+                            value="#{sweStationBean.sweListModel}"
+                                    binding="#{biomassaStation1}"	
+                                    rowKey="#{mS1.id_swe}" 
+                                    selection="#{sweStationBean.sweSelezionato1}" 
+                                    paginator="true" rows="5" selectionMode="single"
+                                    >  
+
+                            <p:ajax event="rowSelect" listener="#{sweDataBean.populate}" update=":#{miaBiomassaDataT.clientId}" />
+                            <p:column headerText="Seleziona la Caldaia">  
+                                <h:outputText value="#{mS1.descrizione}" />  
+                            </p:column>  
+                        </p:dataTable>  
+                    </h:form>
+                        
+                         
+                    <h:form >
+                        <p:dataTable id="miaBiomassaDataT"  
+                            var="datoAttrT" value="#{sweDataBean.dati}"
+                            binding="#{miaBiomassaDataT}"
+                            scrollable="true"
+                           paginator="true" rows="15"  rowsPerPageTemplate="5,10,15,20,50,100,200"
+                            >  
+                            <f:facet name="header">
+                                   <p:commandButton value="Esporta in Excel" ajax="false" disabled="#{loginBean.level5}">
+                                       <p:dataExporter type="xls" target="miaDataTableT" fileName="datiExported" pageOnly="true" postProcessor="#{sweDataBean.postProcessXLS}"/>
+                                </p:commandButton>
+
+                            </f:facet>
+                            <p:columns value="#{sweDataBean.columns}"  
+                                var="columnT" >  
+                                <f:facet name="header">  
+                                    #{columnT.header}  
+                                </f:facet>  
+
+                                #{datoAttrT[columnT.property]}  
+                            </p:columns>  
+                        </p:dataTable>  
+                    </h:form>
+                        
+                    </p:panel>
+                    
+                    
+                     <p:panel binding="#{pannelloDatiFoto}" id="pannelloDatiFoto" visible="#{toolbarBean.pdF}">
+                    <h:form>
+                        <p:dataTable id="fotoStation1" 
+                            var="fS1" 
+                            value="#{fotoBean.fotoListModel}"
+                                    binding="#{fotoStation1}"	
+                                    rowKey="#{fS1.id_fotovoltaic}" 
+                                    selection="#{fotoBean.fotoSelezionato1}" 
+                                    paginator="true" rows="5" selectionMode="single"
+                                    >  
+
+                            <p:ajax event="rowSelect" listener="#{fotoDataBean.populate}" update=":#{miaFotoDataT.clientId}" />
+                            <p:column headerText="Seleziona Impianto">  
+                                <h:outputText value="#{fS1.descrizione}" />  
+                            </p:column>  
+                        </p:dataTable>  
+                    </h:form>
+                        
+                         
+                    <h:form >
+                        <p:dataTable id="miaFotoDataT"  
+                                     var="datoAttrFoto" value="#{fotoDataBean.dati}"
+                            binding="#{miaFotoDataT}"
+                            scrollable="true"
+                           paginator="true" rows="15"  rowsPerPageTemplate="5,10,15,20,50,100,200"
+                            >  
+                            <f:facet name="header">
+                                   <p:commandButton value="Esporta in Excel" ajax="false" disabled="#{loginBean.level5}">
+                                       <p:dataExporter type="xls" target="miaDataTableT" fileName="datiExported" pageOnly="true" postProcessor="#{fotoDataBean.postProcessXLS}"/>
+                                </p:commandButton>
+
+                            </f:facet>
+                            <p:columns value="#{fotoDataBean.columns}"  
+                                var="columnFT" >  
+                                <f:facet name="header">  
+                                    #{columnFT.header}  
+                                </f:facet>  
+
+                                #{datoAttrFoto[columnFT.property]}  
+                            </p:columns>  
+                        </p:dataTable>  
+                    </h:form>
+                        
+                    </p:panel>
+                </p:tab>  
+					
+					
+					
+					
+                <p:tab id="tabStatistics" binding="#{tabStatistics}" title="STATISTICHE">  
+                    
+                    <p:panel binding="#{pannelloStatTotem}" id="pannelloStatTotem" visible="#{toolbarBean.psS}">
+                                        <h:form>
+										
+			            		<p:dataTable id="mieiTotemStation002" 
+                                                            var="mStationT2" 
+                                                            value="#{totemStationBean.totemStationListModel}"
+                                                                    binding="#{mieiTotemStation002}"	
+                                                                    rowKey="#{mStationT2.id_bike_sensor}" 
+                                                                    selection="#{totemStationBean.totemStationSelezionato2}" 
+                                                                    paginator="true" rows="5" selectionMode="single">  
+
+                                                    <p:ajax event="rowSelect" listener="#{totemDataBean.populateStatistics}" 
+                                                            update=":#{miaTotemTableStatistiche.clientId}" />
+
+                                                <p:column headerText="Seleziona la stazione">  
+                                                    <h:outputText value="#{mStationT2.descrizione}" />  
+                                                </p:column>  
+
+                                                </p:dataTable>  
+                                        </h:form>
+            			<h:form>
+                                    
+                                    <p:dataTable id="miaTotemTableStatistiche"  
+                                        var="datoStatAttrTB" value="#{totemDataBean.datiStat}"
+                                        binding="#{miaTotemTableStatistiche}"
+                                        scrollable="true"
+                                        paginator="true" rows="15"  rowsPerPageTemplate="5,10,15,20,50,100,200">  
+                              
+                                        <f:facet name="header">
+
+                                                <p:commandButton value="Esporta in Excel" ajax="false" disabled="#{loginBean.level5}">
+                                           <p:dataExporter type="xls" target="miaTotemTableStatistiche" fileName="datiExported" pageOnly="true" postProcessor="#{totemDataBean.postProcessXLSStat}"/>
+                            </p:commandButton>
+
+                                       </f:facet>
+                                       <p:columns value="#{totemDataBean.columnsStat}"  
+                                           var="columnStatTB" >  
+                                           <f:facet name="header">  
+                                               #{columnStatTB.header}  
+                                           </f:facet>  
+
+                                           #{datoStatAttrTB[columnStatTB.property]}  
+                                       </p:columns>  
+                                   </p:dataTable>  
+                                    
+                                    
+                                   
+                                </h:form>
+                            </p:panel>
+                    
+                    <p:panel binding="#{pannelloStatB}" id="pannelloStatB" visible="#{toolbarBean.psB}">
+                    <h:form>
+                        <p:dataTable id="biomassaStation2" 
+                            var="mS1" 
+                            value="#{sweStationBean.sweListModel}"
+                                    binding="#{biomassaStation2}"	
+                                    rowKey="#{mS1.id_swe}" 
+                                    selection="#{sweStationBean.sweSelezionato2}" 
+                                    paginator="true" rows="5" selectionMode="single"
+                                    >  
+
+                            <p:ajax event="rowSelect" listener="#{sweDataBean.populateStatistics}" update=":#{miaBiomassaDataStat.clientId}" />
+                            <p:column headerText="Seleziona la Caldaia">  
+                                <h:outputText value="#{mS1.descrizione}" />  
+                            </p:column>  
+                        </p:dataTable>  
+                    </h:form>
+                        
+                         
+                    <h:form >
+                        <p:dataTable id="miaBiomassaDataStat"  
+                            var="datoAttrTStat" value="#{sweDataBean.datiStat}"
+                            binding="#{miaBiomassaDataStat}"
+                            scrollable="true"
+                           paginator="true" rows="15"  rowsPerPageTemplate="5,10,15,20,50,100,200"
+                            >  
+                            <f:facet name="header">
+                                <p:commandButton value="Esporta in Excel" ajax="false" disabled="#{loginBean.level5}">
+                                    <p:dataExporter type="xls" target="miaBiomassaDataStat" fileName="datiExported" 
+                                                    pageOnly="true" postProcessor="#{sweDataBean.postProcessXLS}"/>
+                                </p:commandButton>
+
+                            </f:facet>
+                            <p:columns value="#{sweDataBean.columnsStat}"  
+                                var="columnTStat" >  
+                                <f:facet name="header">  
+                                    #{columnTStat.header}  
+                                </f:facet>  
+
+                                #{datoAttrTStat[columnTStat.property]}  
+                            </p:columns>  
+                        </p:dataTable>  
+                    </h:form>
+                        
+                    </p:panel>
+                    
+                 
+                    
+                     
+                            <p:panel binding="#{pannelloStatF}" id="pannelloStatF" visible="#{toolbarBean.psF}">
+                    <h:form>
+                        <p:dataTable id="fotovoltaicoStation2" 
+                            var="mF1" 
+                            value="#{fotoBean.fotoListModel}"
+                                    binding="#{fotovoltaicoStation2}"	
+                                    rowKey="#{mF1.id_fotovoltaic}" 
+                                    selection="#{fotoBean.fotoSelezionato2}" 
+                                    paginator="true" rows="5" selectionMode="single"
+                                    >  
+
+                            <p:ajax event="rowSelect" listener="#{fotoDataBean.populateStatistics}" update=":#{miaFotoDataStat.clientId}" />
+                            <p:column headerText="Seleziona Impianto">  
+                                <h:outputText value="#{mF1.descrizione}" />  
+                            </p:column>  
+                        </p:dataTable>  
+                    </h:form>
+                        
+                         
+                    <h:form >
+                        <p:dataTable id="miaFotoDataStat"  
+                                     var="datoAttrFStat" value="#{fotoDataBean.datiStat}"
+                            binding="#{miaFotoDataStat}"
+                            scrollable="true"
+                           paginator="true" rows="15"  rowsPerPageTemplate="5,10,15,20,50,100,200"
+                            >  
+                            <f:facet name="header">
+                                <p:commandButton value="Esporta in Excel" ajax="false" disabled="#{loginBean.level5}">
+                                    <p:dataExporter type="xls" target="miaFotoDataStat" fileName="datiExported" 
+                                                    pageOnly="true" postProcessor="#{fotoDataBean.postProcessXLS}"/>
+                                </p:commandButton>
+
+                            </f:facet>
+                            <p:columns value="#{fotoDataBean.columnsStat}"  
+                                var="columnFStat" >  
+                                <f:facet name="header">  
+                                    #{columnFStat.header}  
+                                </f:facet>  
+
+                                #{datoAttrFStat[columnFStat.property]}  
+                            </p:columns>  
+                        </p:dataTable>  
+                    </h:form>
+                        
+                    </p:panel>
+                        
+                </p:tab>  
+                
+                
+               
+  				
+    		</p:tabView>  
+	            
+
+                <p:toolbar >  
+                    <f:facet name="left">
+                        <p:graphicImage value="/images/logo_ibimet_blank.png" height="146px" />
+                           
+                    </f:facet>
+                </p:toolbar>
+            
+                <p:toolbar style="background-color:#ffffff;color:#ffffff;">  
+                        <f:facet name="left">
+                            <p:commandLink onclick="PF('questoDlg').show();">
+                                <h:outputText value="Credits" style="color:#FF7012;" />
+                            </p:commandLink>
+                        </f:facet>
+                </p:toolbar>
+ 			
+    <p:dialog modal="true" widgetVar="statusDialog" header="Attendere..."   
+        draggable="false" closable="false">  
+        <p:graphicImage value="/images/ajaxloadingbar.gif" />  
+    </p:dialog>
+            
+    <p:dialog widgetVar="dlgExport" showEffect="fade" modal="true" header="Esporta grafico" resizable="false">
+        <p:outputPanel id="outputExport" layout="block" style="width:500px;height:300px"/>
+    </p:dialog>
+
+    <ui:include src="creditDialog.xhtml" />
+                
+</h:body>
+
+</f:view>

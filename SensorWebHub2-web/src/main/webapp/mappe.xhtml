@@ -1,0 +1,34 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form>
+        <p:poll id="questoPoll" binding="#{questoPoll}"  interval="120"
+                listener="#{mapUrbanBean.popolaUltimiMappa}" update=":#{oggettoMappa.clientId}" />
+    </h:form>
+
+    <p:commandButton id="updMappa"
+                     value="Aggiorna la Mappa"
+                     actionListener="#{mapUrbanBean.popolaUltimiMappa}"
+                     update=":#{oggettoMappa.clientId} "/>
+
+    <p:gmap id="oggettoMappa"
+            binding="#{oggettoMappa}"
+            center="#{mapUrbanBean.centerMap}"
+            zoom="#{mapUrbanBean.zoomFactor}"
+            type="SATELLITE"
+            style="width:100%;height:800px"
+            navigationControl="true"
+            mapTypeControl="true"
+            model="#{mapUrbanBean.puntiModel}" >
+    <p:ajax event="overlaySelect" listener="#{mapUrbanBean.onMarkerSelect}"/>
+    <p:gmapInfoWindow id="infoWindow">
+        <p:outputPanel style="text-align:center;display:block;margin:auto;">
+            <h:outputText escape="false" value="#{mapUrbanBean.marker.data}" style="color:black;font-size:small;"/>  <br />
+            <h:outputText escape="false" value="#{mapUrbanBean.marker.title}" style="color:black;font-size:small;"/>
+        </p:outputPanel>
+    </p:gmapInfoWindow>
+    </p:gmap>
+
+</ui:composition>

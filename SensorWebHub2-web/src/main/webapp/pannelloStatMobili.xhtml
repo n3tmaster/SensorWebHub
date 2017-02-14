@@ -1,0 +1,58 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:panel binding="#{pannelloStatMobili}" id="pannelloStatMobili" visible="#{toolbarBean.pSM}">
+        <h:form>
+            <p:dataTable id="mieiMobileStation003"
+                         var="mStationM3"
+                         value="#{mobileStationBean.mobileStationListModel}"
+                         binding="#{mieiMobileStation003}"
+                         rowKey="#{mStationM3.id_mobile_station}"
+                         selection="#{mobileStationBean.mobileStationSelezionato003}"
+                         paginator="true" rows="5" selectionMode="single">
+                <p:ajax event="rowSelect" listener="#{bikeDataBean.populateStatistics}" update=":#{miaDataTableStatistiche.clientId}" />
+
+
+                <p:column headerText="Seleziona la stazione"  width="80%">
+                    <h:outputText value="#{mStationM3.descrizione}" />
+                </p:column>
+                <p:column headerText="Status"  width="20%">
+                    <h:outputText value="#{mStationM3.status}" />
+                </p:column>
+            </p:dataTable>
+
+
+        </h:form>
+        <h:form>
+
+
+            <p:dataTable id="miaDataTableStatistiche"
+                         var="datoStatAttrB" value="#{bikeDataBean.datiStat}"
+                         binding="#{miaDataTableStatistiche}"
+                         scrollable="true"
+                         paginator="true" rows="15"  rowsPerPageTemplate="5,10,15,20,50,100,200"
+            >
+                <f:facet name="header">
+
+                    <p:commandButton value="Esporta in Excel" ajax="false" disabled="#{loginBean.level5}">
+                        <p:dataExporter type="xls" target="miaDataTableStatistiche" fileName="datiExported" pageOnly="true" postProcessor="#{bikeDataBean.postProcessXLSStat}"/>
+                    </p:commandButton>
+                </f:facet>
+                <p:columns value="#{bikeDataBean.columnsStat}"
+                           var="columnStatB" >
+                    <f:facet name="header">
+                        #{columnStatB.header}
+                    </f:facet>
+
+                    #{datoStatAttrB[columnStatB.property]}
+                </p:columns>
+            </p:dataTable>
+        </h:form>
+
+
+    </p:panel>
+
+</ui:composition>

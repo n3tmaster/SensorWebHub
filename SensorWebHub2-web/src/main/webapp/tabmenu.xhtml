@@ -1,0 +1,421 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:toolbar style="background-color:#ffffff;color:#ffffff;" >
+        <f:facet name="left"   >
+
+            <p:commandLink id="btnTutteStazioniMobili"
+                           action="#{toolbarBean.doTuttiSensoriI}"
+                           update=":growl :#{pannelloDatiMobili.clientId}
+                                    :#{pannelloDatiEddy.clientId}
+                                    :#{pannelloDatiTotem.clientId}
+                                    :#{pannelloStatTotem.clientId}
+                                    :#{pannelloStatEddy.clientId}
+                                    :#{pannelloGrafici.clientId}
+                                    :#{oggettoMappa.clientId}
+                                    :#{imgTutteStazioni.clientId}
+                                    :#{imgTutteStazioniM.clientId}
+
+                                    :#{imgTram.clientId}
+                                    :#{imgBike.clientId}
+                                    :#{imgBus.clientId}
+                                    :#{imgWatch.clientId}
+                                    :#{imgPolice.clientId}
+                                    :#{imgJeep.clientId}
+                                    :#{imgTaxi.clientId}
+                                    :#{imgGarbage.clientId}
+                                    :#{imgCovariance.clientId}
+                                    :#{imgStazioni.clientId}
+                                    :#{imgTotem.clientId}"
+                           style="width: 90px;"
+            >
+                <p:graphicImage id="imgTutteStazioniM" binding="#{imgTutteStazioniM}" url="#{toolbarBean.doTuttiSensoriURL}"
+                                style="border-right-style: dashed; border-right-width: thin; border-right-color:#C8C8C8;
+                                            background-color: #{toolbarBean.coloreTSensori};
+                                            width: 80px; height: 70px;padding: 10px;"/>
+
+            </p:commandLink>
+
+
+
+            <p:commandLink id="btnTram"
+                           action="#{toolbarBean.doTramI}"
+                           update=":growl :#{pannelloDatiMobili.clientId}
+                                    :#{pannelloDatiEddy.clientId}
+                                    :#{pannelloStatMobili.clientId}
+                                    :#{pannelloStatTotem.clientId}
+                                    :#{pannelloDatiTotem.clientId}
+                                    :#{pannelloStatEddy.clientId}
+                                    :#{oggettoMappa.clientId}
+                                    :#{pannelloGrafici.clientId}
+                                    :#{imgTutteStazioni.clientId}
+                                    :#{imgTutteStazioniM.clientId}
+                                    :#{imgTram.clientId}
+                                    :#{imgBike.clientId}
+                                    :#{imgBus.clientId}
+                                    :#{imgWatch.clientId}
+                                    :#{imgPolice.clientId}
+                                    :#{imgJeep.clientId}
+                                    :#{imgTaxi.clientId}
+                                    :#{imgGarbage.clientId}
+                                    :#{imgCovariance.clientId}
+                                    :#{imgStazioni.clientId}
+                                    :#{imgTotem.clientId}
+                                    "
+            >
+                <h:graphicImage id="imgTram" binding="#{imgTram}" url="#{toolbarBean.doTramURL}"
+                                style="border-right-color:#C8C8C8;  border-right-style: dashed; border-right-width: thin; border-spacing: 5px; background-color: #{toolbarBean.coloreTram};
+				width: 80px; height: 70px;padding: 10px;
+				 "/>
+            </p:commandLink>
+
+            <p:commandLink id="btnBike"
+                           action="#{toolbarBean.doBikeI}"
+                           update=":growl :#{pannelloDatiMobili.clientId}
+                                    :#{pannelloDatiEddy.clientId}
+                                    :#{pannelloStatMobili.clientId}
+                                    :#{pannelloDatiTotem.clientId}
+                                    :#{pannelloStatTotem.clientId}
+                                    :#{pannelloStatEddy.clientId}
+                                    :#{pannelloGrafici.clientId}
+                                    :#{oggettoMappa.clientId}
+                                    :#{imgTutteStazioni.clientId}
+                                    :#{imgTutteStazioniM.clientId}
+                                    :#{imgTram.clientId}
+                                    :#{imgBike.clientId}
+                                    :#{imgBus.clientId}
+                                    :#{imgWatch.clientId}
+                                    :#{imgPolice.clientId}
+                                    :#{imgJeep.clientId}
+                                    :#{imgTaxi.clientId}
+                                    :#{imgGarbage.clientId}
+                                    :#{imgCovariance.clientId}
+                                    :#{imgStazioni.clientId}
+                                    :#{imgTotem.clientId}
+                                    "
+
+            >
+                <h:graphicImage id="imgBike" binding="#{imgBike}" url="#{toolbarBean.doBikeURL}"
+                                style="border-right-color:#C8C8C8;  border-right-style: dashed; border-right-width: thin; border-spacing: 5px; background-color: #{toolbarBean.coloreBike};
+				width: 80px; height: 70px;padding: 10px;
+				 "/>
+            </p:commandLink>
+
+            <p:commandLink id="btnBus"
+                           action="#{toolbarBean.doBusI}"
+                           update=":growl :#{pannelloDatiMobili.clientId}
+                                    :#{pannelloDatiEddy.clientId}
+                                    :#{pannelloStatMobili.clientId}
+                                    :#{pannelloStatTotem.clientId}
+                                    :#{pannelloDatiTotem.clientId}
+                                    :#{pannelloStatEddy.clientId}
+                                    :#{pannelloGrafici.clientId}
+                                    :#{oggettoMappa.clientId}
+                                    :#{imgTutteStazioni.clientId}
+                                    :#{imgTutteStazioniM.clientId}
+                                    :#{imgTram.clientId}
+                                    :#{imgBike.clientId}
+                                    :#{imgBus.clientId}
+                                    :#{imgWatch.clientId}
+                                    :#{imgPolice.clientId}
+                                    :#{imgJeep.clientId}
+                                    :#{imgTaxi.clientId}
+                                    :#{imgGarbage.clientId}
+                                    :#{imgCovariance.clientId}
+                                    :#{imgStazioni.clientId}
+                                    :#{imgTotem.clientId}
+                                    "
+            >
+                <h:graphicImage id="imgBus" binding="#{imgBus}" url="#{toolbarBean.doBusURL}"
+                                style="border-right-color:#C8C8C8;  border-right-style: dashed; border-right-width: thin; border-spacing: 5px; background-color: #{toolbarBean.coloreBus};
+				width: 80px; height: 70px;padding: 10px;
+				 "/>
+            </p:commandLink>
+
+            <p:commandLink id="btnWatch"
+                           action="#{toolbarBean.doWatchI}"
+                           update=":growl :#{pannelloDatiMobili.clientId}
+                                    :#{pannelloDatiEddy.clientId}
+                                    :#{pannelloStatTotem.clientId}
+                                    :#{pannelloStatMobili.clientId}
+                                    :#{pannelloDatiTotem.clientId}
+                                    :#{pannelloStatEddy.clientId}
+                                    :#{pannelloGrafici.clientId}
+                                    :#{oggettoMappa.clientId}
+                                    :#{imgTutteStazioni.clientId}
+                                    :#{imgTutteStazioniM.clientId}
+                                    :#{imgTram.clientId}
+                                    :#{imgBike.clientId}
+                                    :#{imgBus.clientId}
+                                    :#{imgWatch.clientId}
+                                    :#{imgPolice.clientId}
+                                    :#{imgJeep.clientId}
+                                    :#{imgTaxi.clientId}
+                                    :#{imgGarbage.clientId}
+                                    :#{imgCovariance.clientId}
+                                    :#{imgStazioni.clientId}
+                                    :#{imgTotem.clientId}
+                                    "
+            >
+                <h:graphicImage id="imgWatch" binding="#{imgWatch}" url="#{toolbarBean.doWatchURL}"
+                                style="border-right-color:#C8C8C8;  border-right-style: dashed; border-right-width: thin; border-spacing: 5px; background-color: #{toolbarBean.coloreWatch};
+				width: 80px; height: 70px;padding: 10px;
+				 "/>
+            </p:commandLink>
+
+            <p:commandLink id="btnPolice"
+                           action="#{toolbarBean.doPoliceI}"
+                           update=":growl :#{pannelloDatiMobili.clientId}
+                                    :#{pannelloDatiEddy.clientId}
+                                    :#{pannelloStatTotem.clientId}
+                                    :#{pannelloStatMobili.clientId}
+                                    :#{pannelloStatEddy.clientId}
+                                    :#{pannelloDatiTotem.clientId}
+                                    :#{pannelloGrafici.clientId}
+                                    :#{oggettoMappa.clientId}
+                                    :#{imgTutteStazioni.clientId}
+                                    :#{imgTutteStazioniM.clientId}
+                                    :#{imgTram.clientId}
+                                    :#{imgBike.clientId}
+                                    :#{imgBus.clientId}
+                                    :#{imgWatch.clientId}
+                                    :#{imgPolice.clientId}
+                                    :#{imgJeep.clientId}
+                                    :#{imgTaxi.clientId}
+                                    :#{imgGarbage.clientId}
+                                    :#{imgCovariance.clientId}
+                                    :#{imgStazioni.clientId}
+                                    :#{imgTotem.clientId}
+                                    "
+            >
+                <h:graphicImage id="imgPolice" binding="#{imgPolice}" url="#{toolbarBean.doPoliceURL}"
+                                style="border-right-color:#C8C8C8; border-right-style: dashed; border-right-width: thin; border-spacing: 5px; background-color: #{toolbarBean.colorePolice};
+				width: 80px; height: 70px;padding: 10px;
+				 "/>
+            </p:commandLink>
+
+            <p:commandLink id="btnJeep"
+                           action="#{toolbarBean.doJeepI}"
+                           update=":growl :#{pannelloDatiMobili.clientId}
+                                    :#{pannelloDatiTotem.clientId}
+                                    :#{pannelloDatiEddy.clientId}
+                                    :#{pannelloStatTotem.clientId}
+                                    :#{pannelloStatMobili.clientId}
+                                    :#{pannelloStatEddy.clientId}
+                                    :#{pannelloGrafici.clientId}
+                                    :#{oggettoMappa.clientId}
+                                    :#{imgTutteStazioni.clientId}
+                                    :#{imgTutteStazioniM.clientId}
+                                    :#{imgTram.clientId}
+                                    :#{imgBike.clientId}
+                                    :#{imgBus.clientId}
+                                    :#{imgWatch.clientId}
+                                    :#{imgPolice.clientId}
+                                    :#{imgJeep.clientId}
+                                    :#{imgTaxi.clientId}
+                                    :#{imgGarbage.clientId}
+                                    :#{imgCovariance.clientId}
+                                    :#{imgStazioni.clientId}
+                                    :#{imgTotem.clientId}
+                                    "
+            >
+                <h:graphicImage id="imgJeep" binding="#{imgJeep}" url="#{toolbarBean.doJeepURL}"
+                                style="border-right-color:#C8C8C8; border-right-style: dashed;  border-right-width: thin; border-spacing: 5px; background-color: #{toolbarBean.coloreJeep};
+				width: 80px; height: 70px;padding: 10px;
+				 "/>
+            </p:commandLink>
+
+            <p:commandLink id="btnTaxi"
+                           action="#{toolbarBean.doTaxiI}"
+                           update=":growl :#{pannelloDatiMobili.clientId}
+                                    :#{pannelloDatiEddy.clientId}
+                                    :#{pannelloDatiTotem.clientId}
+                                    :#{pannelloStatTotem.clientId}
+                                    :#{pannelloStatMobili.clientId}
+                                    :#{pannelloStatEddy.clientId}
+                                    :#{pannelloGrafici.clientId}
+                                    :#{imgTutteStazioni.clientId}
+                                    :#{oggettoMappa.clientId}
+                                    :#{imgTutteStazioniM.clientId}
+                                    :#{imgTram.clientId}
+                                    :#{imgBike.clientId}
+                                    :#{imgBus.clientId}
+                                    :#{imgWatch.clientId}
+                                    :#{imgPolice.clientId}
+                                    :#{imgJeep.clientId}
+                                    :#{imgTaxi.clientId}
+                                    :#{imgGarbage.clientId}
+                                    :#{imgCovariance.clientId}
+                                    :#{imgStazioni.clientId}
+                                    :#{imgTotem.clientId}
+                                    "
+            >
+                <h:graphicImage id="imgTaxi" binding="#{imgTaxi}" url="#{toolbarBean.doTaxiURL}"
+                                style="border-right-color:#C8C8C8; border-right-style: dashed;  border-right-width: thin; border-spacing: 5px; background-color: #{toolbarBean.coloreTaxi};
+				width: 80px; height: 70px;padding: 10px;
+				 "/>
+            </p:commandLink>
+
+
+            <p:commandLink id="btnGarbage"
+                           action="#{toolbarBean.doGarbageI}"
+                           update=":growl :#{pannelloDatiMobili.clientId}
+                                    :#{pannelloDatiEddy.clientId}
+                                    :#{pannelloStatTotem.clientId}
+                                    :#{pannelloStatMobili.clientId}
+                                    :#{pannelloDatiTotem.clientId}
+                                    :#{pannelloGrafici.clientId}
+                                    :#{pannelloStatEddy.clientId}
+                                    :#{oggettoMappa.clientId}
+                                    :#{imgTutteStazioni.clientId}
+                                    :#{imgTutteStazioniM.clientId}
+                                    :#{imgTram.clientId}
+                                    :#{imgBike.clientId}
+                                    :#{imgBus.clientId}
+                                    :#{imgWatch.clientId}
+                                    :#{imgPolice.clientId}
+                                    :#{imgJeep.clientId}
+                                    :#{imgTaxi.clientId}
+                                    :#{imgGarbage.clientId}
+                                    :#{imgCovariance.clientId}
+                                    :#{imgStazioni.clientId}
+                                    :#{imgTotem.clientId}
+                                    "
+
+            >
+                <h:graphicImage id="imgGarbage" binding="#{imgGarbage}" url="#{toolbarBean.doGarbageURL}"
+                                style="border-right-color:#C8C8C8;  border-right-style: dashed;  border-right-width: thin; border-spacing: 5px; background-color: #{toolbarBean.coloreGarbage};
+				width: 80px; height: 70px;padding: 10px;
+				 "/>
+            </p:commandLink>
+            <p:commandLink id="btnTutteStazioni"
+                           action="#{toolbarBean.doTutteStazioniI}"
+                           update=":growl :#{pannelloDatiMobili.clientId}
+                                    :#{pannelloDatiEddy.clientId}
+                                    :#{pannelloStatTotem.clientId}
+                                    :#{pannelloStatMobili.clientId}
+                                    :#{pannelloDatiTotem.clientId}
+                                    :#{pannelloGrafici.clientId}
+                                    :#{pannelloStatEddy.clientId}
+                                    :#{imgTutteStazioni.clientId}
+                                    :#{oggettoMappa.clientId}
+                                    :#{imgTutteStazioniM.clientId}
+                                    :#{imgTram.clientId}
+                                    :#{imgBike.clientId}
+                                    :#{imgBus.clientId}
+                                    :#{imgWatch.clientId}
+                                    :#{imgPolice.clientId}
+                                    :#{imgJeep.clientId}
+                                    :#{imgTaxi.clientId}
+                                    :#{imgGarbage.clientId}
+                                    :#{imgCovariance.clientId}
+                                    :#{imgStazioni.clientId}
+                                    :#{imgTotem.clientId}"
+                           style="width: 90px;">
+                <p:graphicImage id="imgTutteStazioni" binding="#{imgTutteStazioni}" url="#{toolbarBean.doTutteStazioniURL}"
+                                style="border-right-style: dashed; border-right-width: thin; border-right-color:#C8C8C8;
+                                background-color: #{toolbarBean.coloreBck};
+				width: 80px; height: 70px;padding: 10px;
+				 "/>
+
+            </p:commandLink>
+            <p:commandLink id="btnCovariance"
+                           action="#{toolbarBean.doCovarianceI}"
+                           update=":growl :#{pannelloDatiMobili.clientId}
+                                    :#{pannelloDatiEddy.clientId}
+                                    :#{pannelloStatTotem.clientId}
+                                    :#{pannelloStatMobili.clientId}
+                                    :#{pannelloDatiTotem.clientId}
+                                    :#{pannelloGrafici.clientId}
+                                    :#{pannelloStatEddy.clientId}
+                                    :#{oggettoMappa.clientId}
+                                    :#{imgTutteStazioni.clientId}
+                                    :#{imgTutteStazioniM.clientId}
+                                    :#{imgTram.clientId}
+                                    :#{imgBike.clientId}
+                                    :#{imgBus.clientId}
+                                    :#{imgWatch.clientId}
+                                    :#{imgPolice.clientId}
+                                    :#{imgJeep.clientId}
+                                    :#{imgTaxi.clientId}
+                                    :#{imgGarbage.clientId}
+                                    :#{imgCovariance.clientId}
+                                    :#{imgStazioni.clientId}
+                                    :#{imgTotem.clientId}
+                                    "
+            >
+                <h:graphicImage id="imgCovariance" binding="#{imgCovariance}" url="#{toolbarBean.doCovarianceURL}"
+                                style="border-right-color:#C8C8C8;  border-right-style: dashed;  border-right-width: thin; border-spacing: 5px; background-color: #{toolbarBean.coloreCovariance};
+				width: 80px; height: 70px;padding: 10px;
+				 "/>
+            </p:commandLink>
+
+            <p:commandLink id="btnStazioni"
+                           action="#{toolbarBean.doStazioniI}"
+                           update=":growl :#{pannelloDatiMobili.clientId}
+                                    :#{pannelloDatiEddy.clientId}
+                                    :#{pannelloStatMobili.clientId}
+                                    :#{pannelloStatTotem.clientId}
+                                    :#{pannelloDatiTotem.clientId}
+                                    :#{pannelloStatEddy.clientId}
+                                    :#{oggettoMappa.clientId}
+                                    :#{pannelloGrafici.clientId}
+                                    :#{imgTutteStazioni.clientId}
+                                    :#{imgTutteStazioniM.clientId}
+                                    :#{imgTram.clientId}
+                                    :#{imgBike.clientId}
+                                    :#{imgBus.clientId}
+                                    :#{imgWatch.clientId}
+                                    :#{imgPolice.clientId}
+                                    :#{imgJeep.clientId}
+                                    :#{imgTaxi.clientId}
+                                    :#{imgGarbage.clientId}
+                                    :#{imgCovariance.clientId}
+                                    :#{imgStazioni.clientId}
+                                    :#{imgTotem.clientId}
+                                    "
+            >
+                <h:graphicImage id="imgStazioni" binding="#{imgStazioni}" url="#{toolbarBean.doStazioniURL}"
+                                style="border-right-color:#C8C8C8;  border-right-style: dashed;  border-right-width: thin; border-spacing: 5px; background-color: #{toolbarBean.coloreStazioni};
+				width: 80px; height: 70px;padding: 10px;
+				 "/>
+            </p:commandLink>
+
+
+            <p:commandLink id="btnTotem"
+                           action="#{toolbarBean.doTotemI}"
+                           update=":growl :#{pannelloDatiMobili.clientId}
+                                    :#{pannelloDatiEddy.clientId}
+                                    :#{pannelloStatTotem.clientId}
+                                    :#{pannelloStatMobili.clientId}
+                                    :#{pannelloDatiTotem.clientId}
+                                    :#{pannelloGrafici.clientId}
+                                    :#{pannelloStatEddy.clientId}
+                                    :#{oggettoMappa.clientId}
+                                    :#{imgTutteStazioniM.clientId}
+                                    :#{imgTutteStazioni.clientId}
+                                    :#{imgTram.clientId}
+                                    :#{imgBike.clientId}
+                                    :#{imgBus.clientId}
+                                    :#{imgWatch.clientId}
+                                    :#{imgPolice.clientId}
+                                    :#{imgJeep.clientId}
+                                    :#{imgTaxi.clientId}
+                                    :#{imgGarbage.clientId}
+                                    :#{imgCovariance.clientId}
+                                    :#{imgStazioni.clientId}
+                                    :#{imgTotem.clientId}
+                                    "
+            >
+                <h:graphicImage id="imgTotem" binding="#{imgTotem}" url="#{toolbarBean.doTotemURL}"
+                                style="border-right-color:#C8C8C8;  border-right-style: dashed;   border-right-width: thin; border-spacing: 5px; background-color: #{toolbarBean.coloreTotem};
+				width: 80px; height: 70px; padding: 10px;
+				 "/>
+            </p:commandLink>
+        </f:facet>
+    </p:toolbar>
+
+</ui:composition>

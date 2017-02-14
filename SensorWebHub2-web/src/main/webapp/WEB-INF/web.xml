@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    <display-name>SensorWeb Hub</display-name>
+    <context-param>
+        <description>State saving method</description>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>server</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+        <param-value>resources.application</param-value>
+    </context-param>
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>swh2-theme</param-value>
+    </context-param>
+    <listener>
+        <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
+    </listener>
+
+
+    <servlet>
+        <description>Retrieve Station Summary Information Details ALL</description>
+        <display-name>GetDataSummaryALL</display-name>
+        <servlet-name>GetDataSummaryALL</servlet-name>
+        <servlet-class>it.cnr.ibimet.bikeclimate.servlets.GetDataSummaryALL</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetDataSummaryALL</servlet-name>
+        <url-pattern>/j_get_station_data_sum_old</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <description>Retrieve Station Summary Information Details</description>
+        <display-name>GetDataSummary</display-name>
+        <servlet-name>GetDataSummary</servlet-name>
+        <servlet-class>it.cnr.ibimet.bikeclimate.servlets.GetDataSummary</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetDataSummary</servlet-name>
+        <url-pattern>/j_get_station_data_sum</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description>Retrieve Station Summary Information</description>
+        <display-name>GetStationSum</display-name>
+        <servlet-name>GetStationSum</servlet-name>
+        <servlet-class>it.cnr.ibimet.bikeclimate.servlets.GetStationSum</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetStationSum</servlet-name>
+        <url-pattern>/j_get_station_sum</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.xhtml</url-pattern>
+        <url-pattern>*.jsf</url-pattern>
+        <url-pattern>/faces/*</url-pattern>
+        <url-pattern>*.faces</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            10
+        </session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>index.xhtml</welcome-file>
+    </welcome-file-list>
+</web-app>

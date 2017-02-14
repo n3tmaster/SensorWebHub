@@ -1,0 +1,151 @@
+<f:view
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	contentType="text/html">
+        <h:head>
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{adminBean.init}" />
+        </f:metadata>
+        
+	</h:head>
+	
+	<h:body>
+            <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/>  
+              
+            <p:toolbar >  
+                <f:facet name="left"   > 
+                    <p:graphicImage value="/images/title_sensorwebhub.9.png" height="30px" />
+                </f:facet>
+  		 	
+                <f:facet name="right"   > 
+                    <h:outputText value="#{loginBean.username}" />
+                    
+                    <p:spacer width="20px" height="30px" />
+                    <p:commandLink action="#{loginBean.logout}">
+                        <p:graphicImage value="images/logout.png" width="30px" height="30px"/>
+                    </p:commandLink>
+                </f:facet>
+            </p:toolbar>
+	
+            <p:growl  id="growl" showDetail="true" sticky="true"  />  
+		
+            <h:form> 
+                <p:panel id="panel2" header="Aggiungi sensori" style="margin-bottom:10px;">
+                <h:panelGrid columns="2" cellpadding="5">
+
+                    <p:outputLabel for="param_name" value="Parametro" />
+                    <p:inputText id="param_name" required="true" value="#{adminSensorsBean.param_name}"/>
+
+                    <p:outputLabel for="minval" value="Limite minimo" />
+                    <p:inputText id="minval" required="true" value="#{adminSensorsBean.min_val}"/>
+
+                    <p:outputLabel for="maxval" value="Limite massimo" />
+                    <p:inputText id="maxval" required="true" value="#{adminSensorsBean.max_val}"/>
+
+                    <p:outputLabel for="unit" value="Unità di misura" />
+                    <p:inputText id="unit" required="true" value="#{adminSensorsBean.unit}"/>
+                                
+                    <p:outputLabel value="Chart Type" for="chartType" />
+                    <p:selectOneMenu id="chartType" value="#{adminSensorsBean.selectedChartType}" >
+                       <f:selectItem itemLabel="Select Type" itemValue="-1" noSelectionOption="false" />
+                       <f:selectItem itemLabel="Linea" itemValue="LINE" noSelectionOption="false" />
+                       <f:selectItem itemLabel="Barra" itemValue="BAR" noSelectionOption="false" />
+                    </p:selectOneMenu>
+                    
+                     <p:outputLabel value="Aggregation Type" for="aggregationType" />
+                     <p:selectOneMenu id="aggregationType" value="#{adminSensorsBean.selectedAggregationType}" >
+                       <f:selectItem itemLabel="Select Type" itemValue="-1" noSelectionOption="false" />
+                       <f:selectItem itemLabel="Sommatoria" itemValue="sum" noSelectionOption="false" />
+                       <f:selectItem itemLabel="Media" itemValue="avg" noSelectionOption="false" />
+                    </p:selectOneMenu>
+                    
+                    <p:outputLabel value="DB Field" for="fieldType" />
+                    <p:selectOneMenu id="fieldType" binding="#{fieldType}" value="#{adminSensorsBean.selectedFieldType}" >
+                        <f:selectItem itemLabel="Select Field" itemValue="-1" noSelectionOption="false" />
+                        <f:selectItems value="#{adminSensorsBean.fieldsType}" />
+                    </p:selectOneMenu>
+                            
+                </h:panelGrid>
+                    
+                </p:panel>
+                <p:commandButton value="Add Sensor" id="addSensorId" binding="#{addSensorId}" 
+                                 action="#{adminSensorsBean.addSensor}" 
+                                 icon="ui-icon-check" update=":growl :#{tblSensors.clientId}" />
+            </h:form>
+            
+            <h:form>
+                <p:dataTable id="tblSensors"  
+                    var="sensorElem" 
+                    value="#{adminSensorsBean.sensors}"
+                    scrollable="true"
+                    rowKey="#{sensorElem.id}"
+                    selectionMode="single"
+                    binding="#{tblSensors}"
+                    scrollHeight="150"
+                >  
+                    <f:facet name="header">
+                        Sensori inseriti
+                    </f:facet>
+                    <p:ajax event="rowSelect" listener="#{adminSensorsBean.onRowSelect}" update=":#{tblSensors.clientId}" />
+                    <p:column headerText="Sensore">  
+                        <h:outputText value="#{sensorElem.param_name}" />  
+                    </p:column>  
+                    <p:column headerText="DB Field">  
+                        <h:outputText value="#{sensorElem.field_name}" />  
+                    </p:column>  
+                    <p:column headerText="Limite minimo">  
+                        <h:outputText value="#{sensorElem.min_value}" />  
+                    </p:column>  
+                    <p:column headerText="Limite massimo">  
+                        <h:outputText value="#{sensorElem.max_value}" />  
+                    </p:column>
+                    <p:column headerText="Unità">  
+                        <h:outputText value="#{sensorElem.unit}" />  
+                    </p:column>
+                    <f:facet name="footer">
+                        Clicca per eliminare il sensore
+                    </f:facet>
+                    
+                </p:dataTable>
+            </h:form>
+            
+
+            
+            <h:form> 
+               
+                
+                <p:commandButton value="Submit" id="submitId" binding="#{submitId}" action="#{adminSensorsBean.saveStation}" 
+                        icon="ui-icon-check" update=":growl" />
+                <p:commandButton value="Cancel" action="#{adminSensorsBean.cancella}" icon="ui-icon-check"  />
+            </h:form>
+           
+            <p:toolbar >  
+                <f:facet name="left">
+                    <p:graphicImage value="/images/logo_ibimet_blank.png" height="146px" />
+                </f:facet>
+            </p:toolbar>
+            
+            <p:toolbar style="background-color:#ffffff;color:#ffffff;">  
+                <f:facet name="left">
+                    <p:commandLink onclick="PF('questoDlg').show();">
+                        <h:outputText value="Credits" style="color:#FF7012;" />
+                    </p:commandLink>
+                </f:facet>
+            </p:toolbar>
+
+    <p:dialog modal="true" widgetVar="statusDialog" header="Attendere..."   
+        draggable="false" closable="false">  
+        <p:graphicImage value="/images/ajaxloadingbar.gif" />  
+    </p:dialog>
+            
+    <p:dialog widgetVar="dlgExport" showEffect="fade" modal="true" header="Esporta grafico" resizable="false">
+        <p:outputPanel id="outputExport" layout="block" style="width:500px;height:300px"/>
+    </p:dialog>
+
+    <ui:include src="creditDialog.xhtml" />
+</h:body>
+
+</f:view>

@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+
+<navigation-rule>
+    <display-name>LogInRule</display-name>
+    <from-view-id>/index.xhtml</from-view-id>
+
+    <navigation-case>
+        <from-outcome>login_urban</from-outcome>
+        <to-view-id>/pannello.xhtml</to-view-id>
+        <redirect/>
+    </navigation-case>
+
+    <navigation-case>
+        <from-outcome>login_agro</from-outcome>
+        <to-view-id>/pannelloagrometeo.xhtml</to-view-id>
+        <redirect/>
+    </navigation-case>
+
+    <navigation-case>
+        <from-outcome>login_renew</from-outcome>
+        <to-view-id>/pannellorinnovabili.xhtml</to-view-id>
+        <redirect/>
+     </navigation-case>
+</navigation-rule>
+
+
+
+<navigation-rule>
+    <display-name>LogOutRule</display-name>
+    <from-view-id>/pannello.xhtml</from-view-id>
+
+    <navigation-case>
+        <from-outcome>do_output</from-outcome>
+        <to-view-id>/index.xhtml</to-view-id>
+        <redirect/>
+    </navigation-case>
+
+    <navigation-case>
+        <from-outcome>do_admin</from-outcome>
+        <to-view-id>/adminpanel.xhtml</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+        <from-outcome>open_edit</from-outcome>
+        <to-view-id>/edit_station.xhtml</to-view-id>
+    </navigation-case>
+</navigation-rule>
+
+
+<navigation-rule>
+    <display-name>AdminRule</display-name>
+    <from-view-id>/adminpanel.xhtml</from-view-id>
+    <navigation-case>
+        <from-outcome>cancel_insert</from-outcome>
+        <to-view-id>/pannello.xhtml</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+        <from-outcome>do_next</from-outcome>
+        <to-view-id>/adminsensors.xhtml</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+        <from-outcome>do_output</from-outcome>
+        <to-view-id>/index.xhtml</to-view-id>
+        <redirect/>
+    </navigation-case>
+</navigation-rule>
+
+<navigation-rule>
+    <display-name>AddSensorRule</display-name>
+    <from-view-id>/adminsensors.xhtml</from-view-id>
+    <navigation-case>
+        <from-outcome>cancel_insert_sensor</from-outcome>
+        <to-view-id>/pannello.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+        <from-outcome>save_station</from-outcome>
+        <to-view-id>/pannello.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+        <from-outcome>do_output</from-outcome>
+        <to-view-id>/index.xhtml</to-view-id>
+        <redirect/>
+    </navigation-case>
+</navigation-rule>
+
+                
+<navigation-rule>
+    <display-name>LogOutRule3</display-name>
+    <from-view-id>/pannelloagrometeo.xhtml</from-view-id>
+    <navigation-case>
+        <from-outcome>do_output</from-outcome>
+        <to-view-id>/index.xhtml</to-view-id>
+        <redirect/>
+    </navigation-case>
+</navigation-rule>
+
+                
+<navigation-rule>
+    <display-name>LogOutRule2</display-name>
+    <from-view-id>/pannellorinnovabili.xhtml</from-view-id>
+    <navigation-case>
+        <from-outcome>do_output</from-outcome>
+        <to-view-id>/index.xhtml</to-view-id>
+        <redirect/>
+    </navigation-case>
+</navigation-rule>
+
+</faces-config>

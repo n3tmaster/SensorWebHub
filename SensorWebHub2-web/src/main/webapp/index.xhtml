@@ -1,0 +1,343 @@
+<f:view
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        contentType="text/html">
+
+    <h:head>
+
+        <title>SensorWeb Hub</title>
+
+        <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+        <f:metadata>
+            <f:viewParam name="user" value="#{loginBean.usernamehide}" rendered="true"/>
+            <f:viewParam name="password" value="#{loginBean.passwordhide}" rendered="true"/>
+            <f:viewParam name="dominio" value="#{loginBean.dominiohide}" rendered="true" />
+            <f:event type="preRenderView" listener="#{loginBean.init}" />
+        </f:metadata>
+
+    </h:head>
+    <h:body>
+
+        <p:growl id="growl" showDetail="true" life="3000" />
+
+        <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/>  
+
+        <p:dialog modal="true" widgetVar="statusDialog" header="Inizializzazione..."   
+                  draggable="false" closable="false">  
+            <p:graphicImage value="/images/ajaxloadingbar.gif" />  
+        </p:dialog>  
+
+        <p:dialog header="SensorWebHub - Credits" widgetVar="questoDlg" showEffect="explode" modal="true" hideEffect="explode" height="350">  
+
+            <h:outputText value="Project Manager" style="color:#666666;font-size:large;"/>  
+            <br/>
+            <label style="font-size:small;font-weight:bold;">Tiziana De Filippis</label>
+            <a href="mailto:t.de.filippis@ibimet.cnr.it" style="font-size:small;">Email Me</a> 
+            <br/><br/>
+            <h:outputText value="WebApp - DataBase - Backend procedures development" style="color:#666666;font-size:large;"/>  
+            <br/>
+            <label style="font-size:small;font-weight:bold;">Leandro Rocchi</label>
+            <a href="mailto:l.rocchi@ibimet.cnr.it" style="font-size:small;">Email Me</a> 
+            <br/><br/>
+            <h:outputText value="Sensor development" style="color:#666666;font-size:large;"/>  
+            <br/>
+            <label style="font-size:small;font-weight:bold;">Piero Battista</label>
+            <a href="mailto:p.battista@ibimet.cnr.it" style="font-size:small;">Email Me</a> <br/>
+            <label style="font-size:small;font-weight:bold;">Alessandro Matese</label>
+            <a href="mailto:a.matese@ibimet.cnr.it" style="font-size:small;">Email Me</a> <br/>
+            <label style="font-size:small;font-weight:bold;">Alessandro Zaldei</label>
+            <a href="mailto:a.zaldei@ibimet.cnr.it" style="font-size:small;">Email Me</a>  <br/>
+            <label style="font-size:small;font-weight:bold;">Francesco Sabatini</label> 
+            <a href="mailto:f.sabatini@ibimet.cnr.it" style="font-size:small;">Email Me</a> 
+            <br/><br/>
+            <h:outputText value="Project communication" style="color:#666666;font-size:large;"/>  
+            <br/>
+            <label style="font-size:small;font-weight:bold;">Carolina Vagnoli</label>
+            <a href="mailto:c.vagnoli@ibimet.cnr.it" style="font-size:small;" >Email Me</a> 
+            <br/><br/>
+
+            <h:outputText value="Graphic consultant" style="color:#666666;font-size:large;"/>  
+            <br/>
+            <label style="font-size:small;font-weight:bold;">Elena Rapisardi</label>
+            <a href="mailto:e.rapisardi@gmail.com" style="font-size:small;">Email Me</a> 
+            <br/><br/><br/><br/>
+            <h:outputText value="Icon credits" style="color:#666666;font-size:large;"/>  
+            <br/>
+            <a href="http://thenounproject.com/noun/microchip/#icon-No4066" style="font-size:small;" >Microchip</a> 
+            <label style="font-size:small;">designed by </label>
+            <a href="http://thenounproject.com/alexstrat" style="font-size:small;">Alexandre Lachèze</a> 
+            <br/>
+            <a href="http://thenounproject.com/noun/search/#icon-No9873"  style="font-size:small;">Search</a> 
+            <label style="font-size:small;">designed by </label><a href="http://thenounproject.com/Fhlcreative" style="font-size:small;">Phil Goodwin</a> 
+            <br/>
+            <a href="http://thenounproject.com/noun/sensor/#icon-No10175" style="font-size:small;">Sensor</a> 
+            <label style="font-size:small;">designed by </label><a href="http://thenounproject.com/jess_because" style="font-size:small;">Jessica Christine</a> 
+            <br/>
+            <a href="http://thenounproject.com/noun/second-thought/#icon-No4034" style="font-size:small;">
+                Second Thought</a> <label style="font-size:small;">designed by </label><a href="http://thenounproject.com/bhbyron" style="font-size:small;">
+                Benjamin H Byron</a> 
+            <br/>
+            <a href="http://thenounproject.com/noun/vision-test/#icon-No8154" style="font-size:small;">
+                Vision Test</a> <label style="font-size:small;">designed by </label><a href="http://thenounproject.com/lemonliu" style="font-size:small;">
+                Lemon Liu</a> 
+            <br/>
+            <a href="http://thenounproject.com/noun/city/#icon-No1566" style="font-size:small;">City</a> 
+            <label style="font-size:small;">designed by </label><a href="http://thenounproject.com/thibault.geffroy" style="font-size:small;">Thibault Geffroy</a> 
+            <br/>
+            <a href="http://thenounproject.com/noun/home/#icon-No293" style="font-size:small;">Home</a>  
+            <br/>
+            <a href="http://thenounproject.com/noun/weather/#icon-No7747" style="font-size:small;">Weather</a> 
+            <label style="font-size:small;">designed by </label> <a href="http://thenounproject.com/theonlygoodalex" style="font-size:small;">Alex Sheyn</a> 
+            <br/>
+            <a href="http://thenounproject.com/noun/radio-tower/#icon-No1316" style="font-size:small;">Radio Tower</a>
+            <label style="font-size:small;">designed by </label> <a href="http://thenounproject.com/johncaserta" style="font-size:small;">John Caserta</a> 
+            <br/>
+            <a href="http://thenounproject.com/noun/statistics/#icon-No5639" style="font-size:small;">Statistics</a> 
+            <label style="font-size:small;">designed by </label> <a href="http://thenounproject.com/convoy" style="font-size:small;">Marc Antosch</a> 
+            <br/>
+
+            <a href="http://thenounproject.com/noun/line-graph/#icon-No815" style="font-size:small;">Line Graph</a> 
+            <label style="font-size:small;">designed by </label> <a href="http://thenounproject.com/iconify" style="font-size:small;">Scott Lewis</a> 
+            <br/>
+
+            <a href="http://thenounproject.com/noun/map-marker/#icon-No462" style="font-size:small;">Map Marker</a>  
+            <br/>
+            <a href="http://thenounproject.com/noun/statistics/#icon-No9276" style="font-size:small;">Statistics</a> <label style="font-size:small;">designed by </label>
+            <br/>		
+            <a href="http://thenounproject.com/iconify" style="font-size:small;">Scott Lewis</a>
+            <br/>
+            <a href="http://thenounproject.com/noun/login/#icon-No7717" style="font-size:small;">Login</a> 
+            <label style="font-size:small;">designed by </label> <a href="http://thenounproject.com/brandon" style="font-size:small;">Brandon Manning</a> 
+            <br/>
+            <a href="http://thenounproject.com/noun/bike-path/#icon-No2562" style="font-size:small;">Bike Path</a> <label style="font-size:small;">designed by </label>
+            <br/>
+            <a href="http://thenounproject.com/balibalo" style="font-size:small;">Regis Biecher</a>
+            <br/>
+            <a href="http://thenounproject.com/noun/watch/#icon-No395" style="font-size:small;">Watch</a>  
+            <br/>
+            <a href="http://thenounproject.com/noun/radio-tower/#icon-No1316" style="font-size:small;">Radio Tower</a><label style="font-size:small;">designed by </label> 
+            <br/>
+            <a href="http://thenounproject.com/johncaserta" style="font-size:small;">John Caserta</a> 
+            <br/>
+            <a href="http://thenounproject.com/noun/download/#icon-No2593" style="font-size:small;">Download</a> 
+            <label style="font-size:small;">designed by </label><a href="http://thenounproject.com/adamwhitcroft" style="font-size:small;">Adam Whitcroft</a> 
+        </p:dialog>  
+
+        <div style="text-align: center; ">
+            <div style="margin-bottom: 0px; margin-left: auto; margin-right: auto; margin-top: 0px; overflow: hidden; position: relative;  background: #feffff; text-align: left; width: 960px; " id="body_content">
+                <div style="float: left; height: 0px; line-height: 0px; margin-left: 0px; position: relative; width: 960px; z-index: 10; " id="header_layer">
+                    <div style="height: 0px; line-height: 0px; " class="tinyText"> </div>
+                </div>
+                <div style="height: 46px; margin-left: 0px; position: relative; width: 960px; z-index: 0; " id="nav_layer">
+                    <div style="height: 0px; line-height: 0px; " class="tinyText"> </div>
+                    <div style="height: 53px; width: 920px;  height: 53px; left: 22px; position: absolute; top: -4px; width: 920px; z-index: 1; " id="id2">
+                        <img src="images/shapeimage_1.png" alt="" style="height: 53px; width: 920px; " id="id1" />
+                        <div style="height: 50px; left: 1px; position: absolute; top: 1px; width: 917px; z-index: 1; ">
+                            <div class="graphic_shape_layout_style_default">
+                                <div class="paragraph Body" style="line-height: 20px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; margin-top: 0px; padding-bottom: 0pt; padding-top: 0pt; text-align: left; text-indent: 0px; color: #ffe0e0; font-family: 'ArialMT', 'Arial', 'sans-serif'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: 0; line-height: 20px; opacity: 1.00; text-decoration: none; text-transform: none;  text-decoration: none;"> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="height: 46px; left: 0px; position: absolute; top: 0px; width: 960px; z-index: 1; " class="graphic_navigationbar_style_default">
+                        <div style="background: transparent url(images/navbar_active.png) no-repeat scroll center; height: 36px; left: 448px; position: absolute; top: 7px; width: 64px; z-index: 1; "></div>
+                    </div>
+
+
+                    <a href="http://www.sensorwebhub.org/" title="http://www.sensorwebhub.org/"><img src="images/home.png" alt="" id="id4" style="border: none; height: 23px; left: 33px; opacity: 1.00; position: absolute; top: 11px; width: 28px; z-index: 1; " /></a>
+                    <a href="http://www.ibimet.cnr.it/" title="http://www.ibimet.cnr.it/"><img src="images/shapeimage_2.png" alt="IBIMET" title="" id="id6" style="height: 11px; left: 151px; position: absolute; top: 18px; width: 50px; z-index: 1; " /></a>
+                    <div class="graphic_textbox_style_default" style="height: 25px; left: 840px; position: absolute; top: 9px; width: 65px; z-index: 1; " id="id7">
+                        <div>
+                            <div class="graphic_textbox_layout_style_default">
+                                <div class="paragraph Body" style="line-height: 17px; margin-bottom: 0px; margin-top: 0px; padding-bottom: 0pt; padding-top: 0pt; text-align: center; color: #feffff; font-size: 12px; font-weight: bold; line-height: 17px; opacity: 1.00;">ITALIANO</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div style="margin-left: 0px; position: relative; width: 960px; z-index: 5; " id="body_layer">
+
+
+
+
+                    <div style="height: 1px; line-height: 1px; " class="tinyText"> </div>
+                    <div class="graphic_generic_body_textbox_style_default" style="margin-left: 37px; margin-top: 1651px; position: relative; width: 630px; z-index: 1; ">
+                        <div>
+                            <div style="padding: 4px; " class="Normal">
+
+                                <div class="paragraph Body" style="line-height: 20px; margin-bottom: 0px; margin-top: 0px; padding-bottom: 0pt; font-weight: bold; line-height: 20px;  text-decoration: none;"> </div>
+                            </div>
+                            <div style="height: 22px; line-height: 22px; " class="tinyText"> </div>
+                        </div>
+                    </div>
+
+
+                    <img src="images/shapeimage_5.png" title="" id="id11" style="height: 422px; left: 27px; position: absolute; top: 129px; width: 897px; z-index: 1; " />
+
+
+                    <div class="graphic_generic_body_textbox_style_default" style="height: 98px; left: 62px; position: absolute; top: 366px; width: 332px; z-index: 1; " id="id12">
+                        <div>
+                            <div style="padding: 4px; " class="Normal">
+                                <div class="paragraph Body" style="line-height: 23px; margin-bottom: 0px; margin-top: 0px; padding-bottom: 0pt; padding-top: 0pt; font-size: 18px; letter-spacing:     0.08em; line-height: 23px;">Seleziona prima la Categoria e inserisci le credenziali per il login o entra come guest.</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <p:commandLink id="btnagrometeo" 
+                                   action="#{loginBean.doAgroMeteo}"
+                                   update=":growl :#{imgenergie.clientId} 
+                                   :#{imgagrometeo.clientId} :#{imgmeteo.clientId} 
+                                   :#{imgclimaurbano.clientId} :#{imgindoor.clientId}" 
+                                   style="border: none; 
+                                   height: 99px; 
+                                   left: 56px; 
+                                   opacity: 1.00; 
+                                   position: absolute; 
+                                   top: 144px; 
+                                   width: 122px; 
+                                   z-index: 1; ">  
+                        <h:graphicImage id="imgagrometeo" binding="#{imgagrometeo}" url="#{loginBean.doAgroMeteoURL}" 
+                                        style="border: none;width: 122px; "/>
+                    </p:commandLink>   
+
+                    <p:commandLink id="btnmeteo" 
+                                   action="#{loginBean.doMeteo}"
+                                   update=":growl :#{imgenergie.clientId} 
+                                   :#{imgagrometeo.clientId} :#{imgmeteo.clientId} 
+                                   :#{imgclimaurbano.clientId} :#{imgindoor.clientId}" 
+                                   style="border: none; 
+                                   height: 107px; 
+                                   left: 228px; 
+                                   opacity: 1.00; 
+                                   position: absolute; 
+                                   top: 144px; 
+                                   width: 122px; 
+                                   z-index: 1; ">  
+                        <h:graphicImage id="imgmeteo" binding="#{imgmeteo}" url="#{loginBean.doMeteoURL}" 
+                                        style="border: none; 
+
+
+                                        width: 122px; 
+                                        "/>
+                    </p:commandLink>   
+
+                    <p:commandLink id="btnclimaurbano" 
+                                   action="#{loginBean.doClimaUrbano}"
+                                   update=":growl :#{imgenergie.clientId} 
+                                   :#{imgagrometeo.clientId} :#{imgmeteo.clientId} 
+                                   :#{imgclimaurbano.clientId} :#{imgindoor.clientId}" 
+                                   style="border: none; 
+                                   height: 101px; 
+                                   left: 395px; 
+                                   opacity: 1.00; 
+                                   position: absolute; 
+                                   top: 144px; 
+                                   width: 122px; 
+                                   z-index: 1;  ">  
+                        <h:graphicImage id="imgclimaurbano" binding="#{imgclimaurbano}" url="#{loginBean.doClimaUrbanoURL}" 
+                                        style="border: none; 
+                                        width: 122px; 
+                                        "/>
+                    </p:commandLink>   
+
+                    <p:commandLink id="btnindoor" 
+                                   action="#{loginBean.doIndoor}"
+                                   update=":growl :#{imgenergie.clientId} 
+                                   :#{imgagrometeo.clientId} :#{imgmeteo.clientId} 
+                                   :#{imgclimaurbano.clientId} :#{imgindoor.clientId}" 
+                                   style="border: none; 
+                                   height: 97px; 
+                                   left: 556px; 
+                                   opacity: 1.00; 
+                                   position: absolute; 
+                                   top: 144px; 
+                                   width: 122px; 
+                                   z-index: 1;  ">  
+                        <h:graphicImage id="imgindoor" binding="#{imgindoor}" url="#{loginBean.doIndoorURL}" 
+                                        style="border: none; 
+                                        width: 122px; 
+                                        "/>
+                    </p:commandLink>  
+
+                    <p:commandLink id="btnenergie" 
+                                   action="#{loginBean.doEnergie}"
+                                   update=":growl :#{imgenergie.clientId} 
+                                   :#{imgagrometeo.clientId} :#{imgmeteo.clientId} 
+                                   :#{imgclimaurbano.clientId} :#{imgindoor.clientId}" 
+                                   style="border: none; 
+                                   height: 69px; 
+                                   left: 729px; 
+                                   opacity: 1.00; 
+                                   position: absolute; 
+                                   top: 144px; 
+                                   width: 122px; 
+                                   z-index: 1; ">  
+                        <h:graphicImage id="imgenergie" binding="#{imgenergie}" url="#{loginBean.doEnergieURL}" 
+                                        style="border: none; 
+                                        width: 122px; 
+                                        "/>
+                    </p:commandLink>  
+
+
+                    <img src="images/logo_sensowebhub_full_big.png" alt="" id="id17" style="border: none; height: 55px; left: 37px; opacity: 1.00; position: absolute; top: 30px; width: 300px; z-index: 1; " />
+
+
+
+                    <div style="background: #fafafa;  height: 190px; left: 519px; position: absolute; top: 300px; width: 345px; z-index: 1; " class="graphic_shape_style_default" id="id35">
+                        <div style="height: 0px; line-height: 0px; " class="tinyText"> </div>
+
+                        <div class="paragraph Body" style="line-height: 20px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; margin-top: 0px; padding-bottom: 0pt; padding-top: 0pt; text-align: left; text-indent: 0px; color: #000000; font-family: 'ArialMT', 'Arial', 'sans-serif'; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: 0; line-height: 20px; opacity: 1.00; text-decoration: none; text-transform: none;  text-decoration: none;"> 
+                            <h:form>
+                                <p:panelGrid id="gridLogin" columns="2" >
+                                    <f:facet name="header">
+                                        Effettua il Login
+                                    </f:facet>
+
+                                    <h:outputLabel value="User name: " for="username"/>
+                                    <p:inputText label="Username" value="#{loginBean.username}"  id="username"/>
+
+                                    <h:outputLabel value="Password: " for="password"/>
+                                    <p:password value="#{loginBean.password}"   id="password" label="Password"/>
+
+                                    <h:outputLabel value="Login " for="loginButton" />
+                                    <p:commandLink id="loginButton" update=":growl" 
+                                                   action="#{loginBean.login}">
+                                        <h:graphicImage  url="images/login.png" />
+                                    </p:commandLink>
+
+                                    <p:inputText value="#{loginBean.usernamehide}" id="usernamehide" style="display: none;"/>
+                                    <p:inputText value="#{loginBean.passwordhide}" id="passwordhide" style="display: none;"/>
+                                    <p:inputText value="#{loginBean.dominiohide}" id="dominiohide" style="display: none;"/>
+
+                                    <p:remoteCommand name="autoLogin"  action="#{loginBean.logremote}" autoRun="true" />
+
+                                    <f:facet name="footer">
+                                        <p:commandButton id="loginguest" 
+                                                         value="Entra come Guest" 
+                                                         action="#{loginBean.logguest}"  
+                                                         update=":growl"/>  
+                                    </f:facet>
+
+                                </p:panelGrid>
+
+
+                            </h:form></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <br />
+        <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />
+    </h:body>
+</f:view>
+
+
+

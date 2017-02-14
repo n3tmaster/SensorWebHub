@@ -1,0 +1,111 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        contentType="text/html">
+
+    <h:head>
+     <!--   <link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/css/urbanclimate.css" />  -->
+        <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+	</h:head>
+
+	<h:body>
+            <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/>
+
+            <p:toolbar >
+                <f:facet name="left"   >
+                    <p:graphicImage value="/images/title_sensorwebhub.9.png" height="30px" />
+                </f:facet>
+
+                <f:facet name="right"   >
+
+
+
+                  <h:outputText value="Benvenuto: #{loginBean.username}" />
+                    <p:spacer width="20px" height="30px" />
+                    <p:commandLink action="#{loginBean.logout}">
+                        <p:graphicImage value="images/logout.png" width="30px" height="30px"/>
+                    </p:commandLink>
+                </f:facet>
+            </p:toolbar>
+
+            <p:growl  id="growl" showDetail="true" sticky="true"  />
+
+            <p:panel style="border:none;">
+                <p:graphicImage value="images/clima_urbano_banner.png" height="50px" />
+                <p:commandButton action="#{loginBean.goAdmin}" value="Pannello Admin" style="display: #{loginBean.adminstatus}" />
+            </p:panel>
+
+        <ui:include src="tabmenu.xhtml" />
+
+
+            <p:tabView effect="fade" effectDuration="normal" >
+
+
+            <p:tab id="tabMappe" title="MAPPE">
+
+                <ui:include src="mappe.xhtml" />
+
+            </p:tab>
+
+            <p:tab id="tabGrafici" title="GRAFICI" >
+
+                <ui:include src="grafici.xhtml" />
+
+            </p:tab>
+
+            <p:tab id="tabMobile" binding="#{tabMobile}" title="DATI"  disabled="#{toolbarBean.disattivaTab}">
+
+                <ui:include src="pannelloDatiMobili.xhtml" />
+
+                <ui:include src="pannelloDatiFissi.xhtml" />
+
+                <ui:include src="pannelloDatiEddy.xhtml" />
+
+            </p:tab>
+
+            <p:tab id="tabStatMobile" binding="#{tabStatMobile}" title="STATISTICHE" disabled="#{toolbarBean.disattivaTab}">
+
+                <ui:include src="pannelloStatMobili.xhtml" />
+
+                <ui:include src="pannelloStatFissi.xhtml" />
+
+                <ui:include src="pannelloStatEddy.xhtml" />
+
+            </p:tab>
+
+
+
+        </p:tabView>
+
+
+    <p:toolbar >
+        <f:facet name="left">
+            <p:graphicImage value="/images/logo_ibimet_blank.png" height="146px" />
+
+        </f:facet>
+    </p:toolbar>
+
+    <p:toolbar style="background-color:#ffffff;color:#ffffff;">
+        <f:facet name="left">
+            <p:commandLink onclick="PF('questoDlg').show();">
+                <h:outputText value="Credits" style="color:#FF7012;" />
+            </p:commandLink>
+        </f:facet>
+    </p:toolbar>
+
+    <p:dialog modal="true" widgetVar="statusDialog" header="Attendere..."
+        draggable="false" closable="false">
+        <p:graphicImage value="/images/ajaxloadingbar.gif" />
+    </p:dialog>
+
+    <p:dialog widgetVar="dlgExport" showEffect="fade" modal="true" header="Esporta grafico" resizable="false">
+        <p:outputPanel id="outputExport" layout="block" style="width:500px;height:300px"/>
+    </p:dialog>
+
+    <ui:include src="creditDialog.xhtml" />
+
+</h:body>
+
+</f:view>

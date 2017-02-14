@@ -1,0 +1,134 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:panel binding="#{pannelloDatiMobili}" id="pannelloDatiMobili" visible="#{toolbarBean.pDM}">
+
+        <h:form>
+            <p:panelGrid style="width:100%" >
+                <p:row>
+                    <p:column width="60%">
+                        <p:dataTable id="mieiMobileStation002"
+                                     var="mStationM2"
+                                     value="#{mobileStationBean.mobileStationListModel}"
+                                     binding="#{mieiMobileStation002}"
+                                     rowKey="#{mStationM2.id_mobile_station}"
+                                     selection="#{mobileStationBean.mobileStationSelezionato002}"
+                                     paginator="true" rows="5" selectionMode="single"
+                        >
+
+                            <p:ajax event="rowSelect" listener="#{bikeDataBean.populate}" update=":#{miaDataTable.clientId}
+                                                    :#{consinstencyDataTable.clientId}
+                                                    :#{yearOut.clientId}" />
+                            <p:column headerText="Seleziona la stazione"  width="80%">
+                                <h:outputText value="#{mStationM2.descrizione}" />
+                            </p:column>
+                            <p:column headerText="Status"  width="20%">
+                                <!-- TODO: change with EL 2.2 method when use Tomecat 7 or newer -->
+                                <p:commandButton id="deactivate"
+                                                 action="#{mobileStationBean.switchActivate}"
+                                                 value="#{mStationM2.status}"
+                                                 update=":#{mieiMobileStation002.clientId}"
+                                                 style="display: #{loginBean.enableAtivateBtn}">
+                                    <f:setPropertyActionListener value="#{mStationM2.id_mobile_station}" target="#{mobileStationBean.passedId}" />
+                                </p:commandButton>
+                                <h:outputText value="#{mStationM2.status}" style="display: #{loginBean.enableAtivateLabel}" />
+                            </p:column>
+                            <p:column headerText="Edit"  width="20%">
+                                <!-- TODO: change with EL 2.2 method when use Tomecat 7 or newer -->
+                                <p:commandButton id="editStation"
+                                                 action="#{mobileStationBean.openEdit}"
+                                                 value="..."
+                                                 disabled="#{loginBean.disabledEditBtn}">
+                                    <f:setPropertyActionListener value="#{mStationM2.id_mobile_station}" target="#{mobileStationBean.passedId}" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </p:column>
+
+                    <p:column width="40%">
+                        <p:panelGrid style="width:100%" >
+                            <p:row>
+                                <p:column colspan="3">
+                                    <p:chart type="bar"  id="consinstencyDataTable" model="#{graphConsistencyBean.model}"  binding="#{consinstencyDataTable}"
+                                             style="height:100%;font-size: 14pt;" />
+                                </p:column>
+
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                   
+
+                                    <p:commandLink id="prevYearBtn"
+                                                   actionListener="#{graphConsistencyBean.prevYear}"
+                                                   update=":#{consinstencyDataTable.clientId} :#{yearOut.clientId}">
+                                        <p:graphicImage url="resources/left1arrow.svg"
+                                                        style="border-style: solid;
+                                                                        border-width: thin;
+                                                                        border-color:#999999;
+                                                                        background-color: #fafafa;
+                                                                        width: 80px; height: 70px;padding: 10px;"/>
+
+                                    </p:commandLink>
+
+
+                                </p:column>
+                                <p:column >
+                                    <p:outputLabel id="yearOut"  binding="#{yearOut}"  value="#{graphConsistencyBean.year}" />
+                                </p:column>
+                                <p:column>
+
+                                    <p:commandLink id="nextYearBtn"
+                                                   actionListener="#{graphConsistencyBean.nextYear}"
+                                                   update=":#{consinstencyDataTable.clientId} :#{yearOut.clientId}">
+                                        <p:graphicImage url="resources/right1arrow.svg"
+                                                        style="border-style: solid;
+                                                                        border-width: thin;
+                                                                        border-color:#999999;
+                                                                        background-color: #fafafa;
+                                                                        width: 80px; height: 70px;padding: 10px;"/>
+
+                                    </p:commandLink>
+
+
+                                </p:column>
+
+                            </p:row>
+                        </p:panelGrid>
+
+
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+        </h:form>
+
+
+        <h:form >
+            <p:dataTable id="miaDataTable"
+                         var="datoAttr" value="#{bikeDataBean.dati}"
+                         binding="#{miaDataTable}"
+                         scrollable="true"
+                         paginator="true" rows="15"  rowsPerPageTemplate="5,10,15,20,50,100,200">
+                <f:facet name="header">
+
+                    <p:commandButton value="Esporta in Excel" ajax="false" disabled="#{loginBean.level5}">
+                        <p:dataExporter type="xls" target="miaDataTable" fileName="datiExported" pageOnly="true" postProcessor="#{bikeDataBean.postProcessXLS}"/>
+                    </p:commandButton>
+
+                </f:facet>
+                <p:columns value="#{bikeDataBean.columns}"
+                           var="column" >
+                    <f:facet name="header">
+                        #{column.header}
+                    </f:facet>
+
+                    #{datoAttr[column.property]}
+                </p:columns>
+            </p:dataTable>
+        </h:form>
+    </p:panel>
+
+
+</ui:composition>

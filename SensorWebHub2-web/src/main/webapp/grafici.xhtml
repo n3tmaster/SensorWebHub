@@ -1,0 +1,210 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+<p:panel binding="#{pannelloGrafici}" id="pannelloGrafici" >
+    <p:panel binding="#{pannelloGraficiSceltaMobili}" id="pannelloGraficiSceltaMobili" visible="#{toolbarBean.pDM}">
+
+        <h:form>
+            <p:panelGrid style="width:100%" >
+                <p:row>
+                    <p:column>
+                        <p:dataTable id="mieiMobileStation001"
+                                     var="mStation"
+                                     value="#{mobileStationBean.mobileStationListModel}"
+                                     binding="#{mieiMobileStation001}"
+                                     rowKey="#{mStation.id_mobile_station}"
+                                     selection="#{mobileStationBean.mobileStationSelezionato001}"
+                                     paginator="true" rows="5"
+                                     selectionMode="single">
+
+
+                            <p:column headerText="Seleziona la stazione" width="80%">
+                                <h:outputText value="#{mStation.descrizione}" />
+                            </p:column>
+
+                            <p:column headerText="Status" width="20%">
+                                <h:outputText value="#{mStation.status}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:column>
+
+                    <p:column rowspan="2">
+                        <h:outputLabel value="Da:" for="fromCal" /><p:spacer />
+                        <p:calendar  id="fromCal" value="#{chartBean.date}" />
+                        <h:outputLabel value="A:" for="toCal" /><p:spacer />
+                        <p:calendar  id="toCal" value="#{chartBean.date2}" />
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            <p:commandButton id="updChart" value="Visualizza"
+                             actionListener="#{chartBean.popolaMobile}"
+                             update=":#{graficoModel.clientId}
+                             :#{graficoModel1.clientId}
+                             :#{graficoModel2.clientId}
+                             :#{graficoModel3.clientId}
+                             :#{graficoModel4.clientId}
+                             :#{graficoModel5.clientId}
+                             :#{graficoModel6.clientId}
+                             :#{graficoModel7.clientId}
+                             :#{graficoModel8.clientId}
+                             :#{graficoModel9.clientId}
+                             :#{aPanelCharts.clientId}"/>
+
+        </h:form>
+
+    </p:panel>
+
+
+    <p:panel binding="#{pannelloGraficiSceltaTotem}" id="pannelloGraficiSceltaTotem" visible="#{toolbarBean.pDT}">
+
+        <h:form>
+            <p:panelGrid style="width:100%" >
+                <p:row>
+                    <p:column>
+                        <p:dataTable id="mieiTotemStation000"
+                                     var="mStationT0"
+                                     value="#{totemStationBean.totemStationListModel}"
+                                     binding="#{mieiTotemStation000}"
+                                     rowKey="#{mStationT0.id_bike_sensor}"
+                                     selection="#{totemStationBean.totemStationSelezionato3}"
+                                     paginator="true" rows="5"
+                                     selectionMode="single">
+
+
+                            <p:column headerText="Seleziona la stazione"  width="80%">
+                                <h:outputText value="#{mStationT0.descrizione}" />
+                            </p:column>
+
+
+                            <p:column headerText="Status" width="20%">
+                                <h:outputText value="#{mStationT0.status}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:column>
+
+                    <p:column rowspan="2">
+                        <h:outputLabel value="Da:" for="fromCal2" /><p:spacer />
+                        <p:calendar  id="fromCal2" value="#{chartBean.dateT}" />
+                        <h:outputLabel value="A:" for="toCal2" /><p:spacer />
+                        <p:calendar  id="toCal2" value="#{chartBean.dateT2}" />
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+
+            <p:commandButton id="updChartT" value="Visualizza"
+                             actionListener="#{chartBean.popolaTotem}"
+                             update=":#{graficoModel.clientId}
+                             :#{graficoModel1.clientId}
+                             :#{graficoModel2.clientId}
+                             :#{graficoModel3.clientId}
+                             :#{graficoModel4.clientId}
+                             :#{graficoModel5.clientId}
+                             :#{graficoModel6.clientId}
+                             :#{graficoModel7.clientId}
+                             :#{graficoModel8.clientId}
+                             :#{graficoModel9.clientId}
+                             :#{aPanelCharts.clientId}"/>
+        </h:form>
+
+    </p:panel>
+
+
+    <p:panel binding="#{pannelloGraficiSceltaEddy}" id="pannelloGraficiSceltaEddy" visible="#{toolbarBean.pDE}">
+
+        <h:form>
+            <p:panelGrid style="width:100%">
+                <p:row>
+                    <p:column>
+                        <p:dataTable id="mieiEddyStation3"
+                                     var="mEddyStation3"
+                                     value="#{eddyStationBean.eddyStationListModel}"
+                                     binding="#{mieiEddyStation3}"
+                                     rowKey="#{mEddyStation3.id_bike_sensor}"
+                                     selection="#{eddyStationBean.eddyStationSelezionato3}"
+                                     paginator="true" rows="5" selectionMode="single">
+                            <p:column headerText="Seleziona la stazione"  width="80%">
+                                <h:outputText value="#{mEddyStation3.descrizione}" />
+                            </p:column>
+
+
+                            <p:column headerText="Status"  width="20%">
+                                <h:outputText value="#{mEddyStation3.status}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:column>
+                    <p:column rowspan="2">
+                        <h:outputLabel value="Da:" for="fromCalE" /><p:spacer />
+                        <p:calendar  id="fromCalE" value="#{chartBean.dateE}" />
+                        <h:outputLabel value="A:" for="toCalE" /><p:spacer />
+                        <p:calendar  id="toCalE" value="#{chartBean.dateE2}" />
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+
+            <p:commandButton id="updChartE" value="Visualizza"
+                             actionListener="#{chartBean.popolaEddy}"
+                             update=":#{graficoModel.clientId}
+                             :#{graficoModel1.clientId}
+                             :#{graficoModel2.clientId}
+                             :#{graficoModel3.clientId}
+                             :#{graficoModel4.clientId}
+                             :#{graficoModel5.clientId}
+                             :#{graficoModel6.clientId}
+                             :#{graficoModel7.clientId}
+                             :#{graficoModel8.clientId}
+                             :#{graficoModel9.clientId}
+                             :#{aPanelCharts.clientId}
+                             "/>
+        </h:form>
+    </p:panel>
+
+    <p:accordionPanel dynamic="true" cache="true" id="aPanelCharts" binding="#{aPanelCharts}">
+        <p:tab title="Grafici giornalieri">
+            <p:chart type="line"  id="graficoModel" model="#{chartBean.model}"  binding="#{graficoModel}"
+                     style="height:500px;width:100%;" responsive="true" />
+        </p:tab>
+        <p:tab title="#{chartBean.graphTitle1}" disabled="#{chartBean.dis1}">
+            <p:chart type="line"  id="graficoModel1" model="#{chartBean.model1}"  binding="#{graficoModel1}"
+                     style="height:500px;width:100%;margin-top:20px" />
+        </p:tab>
+        <p:tab title="#{chartBean.graphTitle2}" disabled="#{chartBean.dis2}">
+            <p:chart type="line"  id="graficoModel2" model="#{chartBean.model2}"  binding="#{graficoModel2}"
+                     style="height:500px;width:100%;margin-top:20px" />
+        </p:tab>
+        <p:tab title="#{chartBean.graphTitle3}" disabled="#{chartBean.dis3}">
+            <p:chart type="line"  id="graficoModel3" model="#{chartBean.model3}"  binding="#{graficoModel3}"
+                     style="height:500px;width:100%;margin-top:20px" />
+        </p:tab>
+        <p:tab title="#{chartBean.graphTitle4}" disabled="#{chartBean.dis4}">
+            <p:chart type="line"  id="graficoModel4" model="#{chartBean.model4}"  binding="#{graficoModel4}"
+                     style="height:500px;width:100%;margin-top:20px" />
+        </p:tab>
+        <p:tab title="#{chartBean.graphTitle5}" disabled="#{chartBean.dis5}">
+            <p:chart type="line"  id="graficoModel5" model="#{chartBean.model4}"  binding="#{graficoModel5}"
+                     style="height:500px;width:100%;margin-top:20px" />
+        </p:tab>
+        <p:tab title="#{chartBean.graphTitle6}" disabled="#{chartBean.dis6}">
+            <p:chart type="line"  id="graficoModel6" model="#{chartBean.model4}"  binding="#{graficoModel6}"
+                     style="height:500px;width:100%;margin-top:20px" />
+        </p:tab>
+        <p:tab title="#{chartBean.graphTitle7}" disabled="#{chartBean.dis7}">
+            <p:chart type="line"  id="graficoModel7" model="#{chartBean.model4}"  binding="#{graficoModel7}"
+                     style="height:500px;width:100%;margin-top:20px" />
+        </p:tab>
+        <p:tab title="#{chartBean.graphTitle8}" disabled="#{chartBean.dis8}">
+            <p:chart type="line"  id="graficoModel8" model="#{chartBean.model4}"  binding="#{graficoModel8}"
+                     style="height:500px;width:100%;margin-top:20px" />
+        </p:tab>
+        <p:tab title="#{chartBean.graphTitle9}" disabled="#{chartBean.dis9}">
+            <p:chart type="line"  id="graficoModel9" model="#{chartBean.model4}"  binding="#{graficoModel9}"
+                     style="height:500px;width:100%;margin-top:20px" />
+        </p:tab>
+    </p:accordionPanel>
+
+</p:panel>
+
+
+
+</ui:composition>
