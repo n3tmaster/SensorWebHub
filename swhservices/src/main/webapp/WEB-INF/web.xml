@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <servlet>
+        <description>Vecchia versione di setData tenuta per retrocompatibilita</description>
+        <display-name>SetData</display-name>
+        <servlet-name>SetData</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.SetData</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SetData</servlet-name>
+        <url-pattern>/j_set_data</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description>Versione generale per download dati</description>
+        <display-name>DownloadData</display-name>
+        <servlet-name>DownloadData</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.DownloadData</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DownloadData</servlet-name>
+        <url-pattern>/j_download_data</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description>Versione generale per upload dati</description>
+        <display-name>UploadData</display-name>
+        <servlet-name>UploadData</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.UploadData</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UploadData</servlet-name>
+        <url-pattern>/j_upload_data</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <description>versione recupero dati in un cerchio versione 2</description>
+        <display-name>GetDataFromArea2</display-name>
+        <servlet-name>GetDataFromArea2</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.GetDataFromArea2</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetDataFromArea2</servlet-name>
+        <url-pattern>/j_get_data_from_area2</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description>versione recupero dati in un cerchio</description>
+        <display-name>GetDataFromArea</display-name>
+        <servlet-name>GetDataFromArea</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.GetDataFromArea</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetDataFromArea</servlet-name>
+        <url-pattern>/j_get_data_from_area</url-pattern>
+    </servlet-mapping>
+    
+     <servlet>
+        <description>versione recupero N misurazioni di tutte le stazioni - nuova versione</description>
+        <display-name>GetLastData2</display-name>
+        <servlet-name>GetLastData2</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.GetLastData2</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetLastData2</servlet-name>
+        <url-pattern>/j_get_last_data2</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet>
+        <description>versione recupero N misurazioni di tutte le stazioni</description>
+        <display-name>GetLastData</display-name>
+        <servlet-name>GetLastData</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.GetLastData</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetLastData</servlet-name>
+        <url-pattern>/j_get_last_data</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet>
+        <description>versione completa versione 3</description>
+        <display-name>SetDataComplete3</display-name>
+        <servlet-name>SetDataComplete3</servlet-name>
+                    
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.SetDataComplete3</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SetDataComplete3</servlet-name>
+        <url-pattern>/j_set_data_complete_3</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <description>versione completa versione 2</description>
+        <display-name>SetDataComplete2</display-name>
+        <servlet-name>SetDataComplete2</servlet-name>
+                    
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.SetDataComplete2</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SetDataComplete2</servlet-name>
+        <url-pattern>/j_set_data_complete_2</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <description>versione completa con O3 per le versioni stabili arduino 1</description>
+        <display-name>SetDataComplete</display-name>
+        <servlet-name>SetDataComplete</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.SetDataComplete</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SetDataComplete</servlet-name>
+        <url-pattern>/j_set_data_complete</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet>
+        <description>versione completa generale per moduli esterni</description>
+        <display-name>SetDataExternalModule</display-name>
+        <servlet-name>SetDataExternalModule</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.SetDataExternalModule</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SetDataExternalModule</servlet-name>
+        <url-pattern>/j_set_external_data</url-pattern>
+    </servlet-mapping>
+        <servlet>
+        <description>Set data per stazioni fisse</description>
+        <display-name>SetDataTotem2</display-name>
+        <servlet-name>SetDataTotem2</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.SetDataTotem2</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SetDataTotem2</servlet-name>
+        <url-pattern>/j_set_data_totem_2</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <description>Set data per stazioni fisse</description>
+        <display-name>SetDataTotem</display-name>
+        <servlet-name>SetDataTotem</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.SetDataTotem</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SetDataTotem</servlet-name>
+        <url-pattern>/j_set_data_totem</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description>set data per le eddy</description>
+        <display-name>SetDataEddy</display-name>
+        <servlet-name>SetDataEddy</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.SetDataEddy</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SetDataEddy</servlet-name>
+        <url-pattern>/j_set_data_eddy</url-pattern>
+    </servlet-mapping>
+     <servlet>
+        <description>get data delle stazioni fisse versione 2</description>
+        <display-name>GetDataTotem2</display-name>
+        <servlet-name>GetDataTotem2</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.GetDataTotem2</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetDataTotem2</servlet-name>
+        <url-pattern>/j_get_data_totem_2</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <description>get data delle stazioni fisse</description>
+        <display-name>GetDataTotem</display-name>
+        <servlet-name>GetDataTotem</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.GetDataTotem</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetDataTotem</servlet-name>
+        <url-pattern>/j_get_data_totem</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description>get log file</description>
+        <display-name>GetLogFile</display-name>
+        <servlet-name>GetLogFile</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.GetLogFile</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetLogFile</servlet-name>
+        <url-pattern>/j_get_log_file</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description>get data dalle eddy</description>
+        <display-name>GetDataEddy</display-name>
+        <servlet-name>GetDataEddy</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.GetDataEddy</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetDataEddy</servlet-name>
+        <url-pattern>/j_get_data_eddy</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description>Sync dati eddy</description>
+        <display-name>GetAllEddyData</display-name>
+        <servlet-name>GetAllEddyData</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.GetAllEddyData</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetAllEddyData</servlet-name>
+        <url-pattern>/j_get_all_eddy_data</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description>Sync dati mobili</description>
+        <display-name>GetAllMobileData</display-name>
+        <servlet-name>GetAllMobileData</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.GetAllMobileData</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetAllMobileData</servlet-name>
+        <url-pattern>/j_get_all_mobile_data</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description>Recupero totale dati stazioni fisse</description>
+        <display-name>GetAllFissoData</display-name>
+        <servlet-name>GetAllFissoData</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.GetAllFissoData</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetAllFissoData</servlet-name>
+        <url-pattern>/j_get_all_fisso_data</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description>Recupero dati versione originale per le stazioni non stabili arduino 1</description>
+        <display-name>GetData</display-name>
+        <servlet-name>GetData</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.GetData</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetData</servlet-name>
+        <url-pattern>/j_get_data</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description>Funzione di servizio per upload di immaigni (versione non definitiva)</description>
+        <servlet-name>UploadImg</servlet-name>
+        <servlet-class>it.cnr.ibimet.swhservices.servlets.UploadImage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UploadImg</servlet-name>
+        <url-pattern>/j_upload_images</url-pattern>
+    </servlet-mapping>
+</web-app>
