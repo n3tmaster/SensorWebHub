@@ -1,5 +1,9 @@
-# SensorWebHub
-SensorWebHub Project
+# SensorWebHub Web App Module
+SensorWebHub Web Application
+
+SWH App uses SWHDB in order to manage acquired data and use webservices module for interoperability features
+
+
 
 -- Version
 
@@ -13,9 +17,11 @@ SensorWebHub Project
 - 3) PostGIS : 2.0 or later
 - 4) Windows/Linux/Mac
 
-- Library dependences
+-- Library/Module dependences
 
 - PrimeFaces 6.0
+- swhservices module
+- swhdb postgis database
 
 
 — HOWTO install SWH Database
