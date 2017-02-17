@@ -385,7 +385,7 @@ public class BikeDataBean implements Serializable,SWH4EConst {
                         dati =  new ArrayList<Map<String, String>>();
                       
                         //create table schema 
-                        //TODO: make column name dinamic
+
                         columns.add(new ColumnModel("Data","data"));
                         columns.add(new ColumnModel("Nome","nome"));
                         for(int i=0; i<cp.getParamNumbers(); i++){
@@ -548,31 +548,7 @@ public class BikeDataBean implements Serializable,SWH4EConst {
 	
 	public void createFile() {
 		
-		//TODO: da scommentare
-/*		
-		
-		System.out.println("Questo Time: "+date.getTime());
-		System.out.println("Questo Time2: "+date2.getTime());
-		GregorianCalendar result1 = null; 
-        result1 = new GregorianCalendar(); 
-        result1.setTimeInMillis(date.getTime()); 
-        result1.add(Calendar.DAY_OF_MONTH, -1);
-        GregorianCalendar result2 = null; 
-        result2 = new GregorianCalendar(); 
-        result2.setTimeInMillis(date2.getTime()); 
-        result2.add(Calendar.DAY_OF_MONTH, 1);
-		TDBManager dsm2=null;
-		
-		GregorianCalendar result1 = null; 
-        result1 = new GregorianCalendar(); 
-        result1.setTimeInMillis(fromData.getTime()); 
-   //    System.out.println("ma perch��� : "+ fromData.toString());
-   //    System.out.println("ma perch���2: "+ toData.toString());
-       
-        GregorianCalendar result2 = null; 
-        result2 = new GregorianCalendar(); 
-        result2.setTimeInMillis(toData.getTime()); 
-        */
+
         TDBManager dsm=null;
 	    try {
 
@@ -583,7 +559,7 @@ public class BikeDataBean implements Serializable,SWH4EConst {
 					//giardino=idgiardini.get(0);
 				System.out.println("BikeDataBean - main - connessione aperta");
 				
-				//TODO: fare questo
+
 				String sqlString="select a.tair,a.co2,a.rad,a.noise,b.nome,a.data,a.id_bikedata,a.utc from dati a, mobile_stations b " +
 						"where a.id_mobile_station=b.id_mobile_station and a.data between ? and ? order by 5,6";
 		
@@ -591,9 +567,7 @@ public class BikeDataBean implements Serializable,SWH4EConst {
 				System.out.println("BikeListBean - query: "+sqlString);
 				
 				dsm.setPreparedStatementRef(sqlString);
-	//TODO: da scommentare			
-//				dsm.setParameter(ParameterType.DATE, result1, 1);
-//				dsm.setParameter(ParameterType.DATE,result2, 2);
+
 				
 				System.out.println("BikeListBean-" + dsm.getPStmt().toString());
 				
