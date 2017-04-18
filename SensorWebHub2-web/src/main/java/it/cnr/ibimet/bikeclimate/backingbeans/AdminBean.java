@@ -48,6 +48,10 @@ public class AdminBean implements Serializable,   SWH4EConst{
 
     private boolean latlongDisabled;
 
+
+
+    private String tags;
+    private String taggroups;
     private String selectedsensorSaved;
     private Date dataregistrazione;
     private String metaDescr;
@@ -174,13 +178,26 @@ public class AdminBean implements Serializable,   SWH4EConst{
         return responsabile;
     }
 
-   
-
-    
-    //Managed Beans
-    
     public void setResponsabile(String responsabile) {
         this.responsabile = responsabile;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public String getTaggroups() {
+        return taggroups;
+    }
+
+    //Managed Beans
+    
+    public void setTaggroups(String taggroups) {
+        this.taggroups = taggroups;
     }
 
     public LoginBean getLoginBean() {

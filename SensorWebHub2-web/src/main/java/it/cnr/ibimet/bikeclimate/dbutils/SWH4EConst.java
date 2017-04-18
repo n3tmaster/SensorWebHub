@@ -141,6 +141,14 @@ public interface SWH4EConst {
     //TODO: Da cambiare appena possibile
     String EMAILFROM = "lerocchi@gmail.com";
     String EMAILTO = "l.rocchi@ibimet.cnr.it";
+
+
+    //context params
+    String CKAN_ID = "ckan_id";
+    String CKAN_BASE_URL = "ckan_base_url";
+    String SWH_BASE_URL = "swh_base_url";
+    String CKAN_FILLER_MODE = "ckan_filler_mode";
+    String OWNER_NAME = "owner_name";
     
     
 }

@@ -10,6 +10,7 @@ import it.cnr.ibimet.bikeclimate.dbutils.SendMail;
 import it.cnr.ibimet.bikeclimate.dbutils.TDBManager;
 import it.cnr.ibimet.bikeclimate.dbutils.TableSchema;
 import it.cnr.ibimet.bikeclimate.entities.Sensor;
+import it.cnr.ibimet.ckan_filler.CkanFiller;
 import it.lr.libs.DBManager;
 import org.primefaces.event.SelectEvent;
 
@@ -342,9 +343,9 @@ public class AdminSensorsBean implements Serializable,SWH4EConst{
                 
                 //Insert metadata
                 
-                sqlString="insert into metadati (id_mobile_station, responsabile, data_registrazione, descrizione, email) "
+                sqlString="insert into metadati (id_mobile_station, responsabile, data_registrazione, descrizione, email, tags, catalogue_tag_groups) "
                                 + "values "
-                                + "(?,?,?,?,?)";
+                                + "(?,?,?,?,?,?,?)";
                 
                 System.out.println(sqlString);
                
@@ -354,6 +355,9 @@ public class AdminSensorsBean implements Serializable,SWH4EConst{
                 dsm.setParameter(DBManager.ParameterType.DATE, result1, 3);
                 dsm.setParameter(DBManager.ParameterType.STRING, adminBean.getMetaDescr(), 4);
                 dsm.setParameter(DBManager.ParameterType.STRING, adminBean.getResponsabileEmail(), 5);
+                dsm.setParameter(DBManager.ParameterType.STRING, adminBean.getTags(), 6);
+                dsm.setParameter(DBManager.ParameterType.STRING, adminBean.getTaggroups(), 7);
+
                 dsm.performInsert();
                 dsm.commit();
                 //Add sensors
@@ -411,6 +415,23 @@ public class AdminSensorsBean implements Serializable,SWH4EConst{
             }
         }
 
+         FacesContext ctx = FacesContext.getCurrentInstance();
+
+         // launch ckan_filler in order to create new dataset in ckan
+         CkanFiller cf = new CkanFiller(adminBean.getStationName(),
+                 ctx.getExternalContext().getInitParameter(CKAN_ID),
+                 ctx.getExternalContext().getInitParameter(OWNER_NAME),
+                 ctx.getExternalContext().getInitParameter(CKAN_BASE_URL),
+                 ctx.getExternalContext().getInitParameter(SWH_BASE_URL),
+                 "jdbc/urbandb"
+                 );
+
+         //create package
+         if(cf.checkExists()){
+             if(cf.createPackage()!=0){
+                 SendMail.sendEmail("l.rocchi@ibimet.cnr.it","[SensorWebHub]: Errore registrazione CKAN","Errore nella registrazione della stazione: "+adminBean.getStationName()+" - Responsabile: "+adminBean.getDescription() + " - "+adminBean.getResponsabileEmail());
+             }
+         }
         
         //send email
         SendMail.sendEmail("l.rocchi@ibimet.cnr.it","[SensorWebHub]: nuova stazione registrata","Registrata la stazione: "+adminBean.getStationName()+" - Responsabile: "+adminBean.getDescription() + " - "+adminBean.getResponsabileEmail());
