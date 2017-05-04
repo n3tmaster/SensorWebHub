@@ -15,6 +15,7 @@ import org.codehaus.jettison.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 
@@ -238,7 +239,7 @@ public class CkanFiller {
      */
     public int setLastUpdate(){
         TDBManager tdb=null;
-        GregorianCalendar lastdata=null;
+    //    GregorianCalendar lastdata=null;
 
         try {
 
@@ -249,34 +250,34 @@ public class CkanFiller {
             }
 
             tdb.openConnection();
-            String url_of_resource_kml = "", url_of_resource_csv = "";
 
 
             //get last date of this station
-            String sqlString = "select max(data) " +
-                    "from " + table_type + " "+
-                    "where id_mobile_station = ? ";
+          //  String sqlString = "select max(data) " +
+          //          "from " + table_type + " "+
+          //          "where id_mobile_station = ? ";
 
-            tdb.setPreparedStatementRef(sqlString);
-            tdb.setParameter(DBManager.ParameterType.INT,""+ id_mobile_station,1);
+          //  tdb.setPreparedStatementRef(sqlString);
+          //  tdb.setParameter(DBManager.ParameterType.INT,""+ id_mobile_station,1);
 
-            tdb.runPreparedQuery();
+          //  tdb.runPreparedQuery();
 
-            if(tdb.next()){
-                lastdata = tdb.getData(1);
-            }
+          //  if(tdb.next()){
+          //      lastdata = tdb.getData(1);
+          //  }
 
             //update last_update field in mobile_stations table
 
-            sqlString = "update mobile_stations set last_update=? where id_mobile_station = ?";
+            String sqlString = "update mobile_stations set last_update=? where id_mobile_station = ?";
 
 
             tdb.setPreparedStatementRef(sqlString);
-            tdb.setParameter(DBManager.ParameterType.DATE,lastdata,1);
+            tdb.setParameter(DBManager.ParameterType.DATE,gdata,1);
 
             tdb.setParameter(DBManager.ParameterType.INT,""+ id_mobile_station,2);
             tdb.performInsert();
 
+            tdb.commit();
             System.out.println("Last timestamp updated");
 
         }catch (Exception e){
@@ -304,9 +305,10 @@ public class CkanFiller {
      * @return -1: error
      */
 
-    public int createAllResources(){
+    public boolean createAllResources(){
         TDBManager tdb=null;
-        String monthString, dayString;
+        String monthString="01", dayString="01", yearString="2000";
+        boolean therearedata=false;
 
         try {
             if(dbcontext.matches("")){
@@ -329,23 +331,29 @@ public class CkanFiller {
 
             tdb.setPreparedStatementRef(sqlString);
             tdb.setParameter(DBManager.ParameterType.INT,""+ id_mobile_station,1);
+
+            gdata.roll(Calendar.DAY_OF_MONTH,1);
+
             tdb.setParameter(DBManager.ParameterType.DATE,gdata,2);
             tdb.runPreparedQuery();
             String url = base_url + REST_BASE_URL + RESOURCE_CREATE;
             //create json structure
             JSONObject json = new JSONObject();
+
             json.put("package_id",package_id);
             json.put("description"," ");
-
             json.put("url"," ");
+
 
             while(tdb.next()){
 
+                therearedata=true;
                 json.remove("url");
                 json.remove("description");
                 json.remove("name");
 
 
+                yearString = tdb.getString(3);
                 if(tdb.getString(2).length()<2){
                     monthString = "0"+tdb.getString(2);
                 }else{
@@ -383,15 +391,11 @@ public class CkanFiller {
                 //Check success or failure
                 if(retData.getBoolean("success")){
                     System.out.println("Resource KML created. Id: "+retData.getJSONObject("result").getString("id"));
-
                 }else{
                     System.out.println("Resource KML Creation Error: ");
                     System.out.println("======================= ");
                     System.out.println(retData.toString());
 
-                    tdb.closeConnection();
-
-                    return -1;
                 }
 
 
@@ -405,25 +409,28 @@ public class CkanFiller {
                 //Check success or failure
                 if(retData.getBoolean("success")){
                     System.out.println("Resource CSV created. Id: "+retData.getJSONObject("result").getString("id"));
-
                 }else{
                     System.out.println("Resource CSV Creation Error: ");
                     System.out.println("======================= ");
                     System.out.println(retData.toString());
-
-                    tdb.closeConnection();
-
-                    return -1;
                 }
 
             }
 
-            return 0;
+
+
         }catch (Exception e){
             System.out.println(e.getMessage());
             System.err.println(e.getMessage());
             e.printStackTrace();
         }finally{
+            if(therearedata){
+                gdata.set(Calendar.YEAR,  Integer.parseInt(yearString));
+                gdata.set(Calendar.MONTH,  (Integer.parseInt(monthString)-1));
+                gdata.set(Calendar.DAY_OF_MONTH,  Integer.parseInt(dayString));
+            }
+
+
             try{
                 tdb.closeConnection();
             }catch(Exception e){
@@ -431,9 +438,12 @@ public class CkanFiller {
                 System.err.println(e.getMessage());
                 e.printStackTrace();
             }
+
+
+
         }
 
-        return 0;
+        return therearedata;
     }
 
     /**
@@ -445,7 +455,7 @@ public class CkanFiller {
 
     public int updateAllStations(){
         TDBManager tdb=null;
-
+        boolean  therearedata = false;
 
         try {
 
@@ -487,19 +497,22 @@ public class CkanFiller {
                 if(!table_type.matches("")) {
                     if (checkExists()) {
                         //it exists : now sync data
-                        addNewResource();
+                        System.out.println("It exists, add new resources");
+                        therearedata = createAllResources();
 
                     } else {
+                        System.out.println("It does not exist, add create package");
                         if (createPackage() == 0) {
 
-                            createAllResources();
+                            therearedata = createAllResources();
 
                         }
                     }
 
                     //update last_update field in mobile_stations table
-                    setLastUpdate();
-
+                    if(therearedata) {
+                        setLastUpdate();
+                    }
                 }else{
                     System.out.println("Station Type wasn't recognized. Skipped");
                 }
@@ -532,7 +545,7 @@ public class CkanFiller {
 
     public int addNewResource(){
         TDBManager tdb=null;
-        String monthString, dayString;
+        String monthString="01", dayString="01", yearString="2000";
 
         try {
 
@@ -553,11 +566,13 @@ public class CkanFiller {
                     "extract(year from data) as \"year\" " +
                     "from " + table_type + " "+
                     "where id_mobile_station = ? AND " +
-                    "data >= ? "+
+                    "data > ? "+
                     "order by 3,2,1";
 
             tdb.setPreparedStatementRef(sqlString);
             tdb.setParameter(DBManager.ParameterType.INT,""+ id_mobile_station,1);
+
+            gdata.roll(Calendar.DAY_OF_MONTH,1);
             tdb.setParameter(DBManager.ParameterType.DATE,gdata,2);
 
             //  tdb.setParameter(DBManager.ParameterType.INT,""+ gc.get(Calendar.DAY_OF_MONTH),2);
@@ -576,6 +591,8 @@ public class CkanFiller {
 
             if(tdb.next()){
 
+
+                yearString = tdb.getString(3);
                 if(tdb.getString(2).length()<2){
                     monthString = "0"+tdb.getString(2);
                 }else{
@@ -624,9 +641,9 @@ public class CkanFiller {
                     System.out.println("======================= ");
                     System.out.println(retData.toString());
 
-                    tdb.closeConnection();
+                    //tdb.closeConnection();
 
-                    return -1;
+                    //return -1;
                 }
 
 
@@ -648,19 +665,22 @@ public class CkanFiller {
                     System.out.println("======================= ");
                     System.out.println(retData.toString());
 
-                    tdb.closeConnection();
+                   // tdb.closeConnection();
 
-                    return -1;
+                   // return -1;
                 }
 
             }
 
-            return 0;
+
         }catch (Exception e){
             System.out.println(e.getMessage());
             System.err.println(e.getMessage());
             e.printStackTrace();
         }finally{
+            gdata.set(Calendar.YEAR,  Integer.parseInt(yearString));
+            gdata.set(Calendar.MONTH,  (Integer.parseInt(monthString)-1));
+            gdata.set(Calendar.DAY_OF_MONTH,  Integer.parseInt(dayString));
             try{
                 tdb.closeConnection();
             }catch(Exception e){
