@@ -22,12 +22,9 @@
 
         <p:growl id="growl" showDetail="true" life="3000" />
 
-        <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/>  
 
-        <p:dialog modal="true" widgetVar="statusDialog" header="Inizializzazione..."   
-                  draggable="false" closable="false">  
-            <p:graphicImage value="/images/ajaxloadingbar.gif" />  
-        </p:dialog>  
+
+
 
         <p:dialog header="SensorWebHub - Credits" widgetVar="questoDlg" showEffect="explode" modal="true" hideEffect="explode" height="350">  
 
@@ -334,8 +331,7 @@
 
         </div>
 
-        <br />
-        <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />
+
     </h:body>
 </f:view>
 

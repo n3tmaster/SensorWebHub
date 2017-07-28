@@ -11,6 +11,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 /**
@@ -152,6 +153,26 @@ public class GetGeoData  extends Application {
                         ) {
 
         return get_data_xml(y1,m1,d1,y2,m2,d2,station_id,usr_id,pwd_id,language);
+    }
+
+
+    @GET
+    @Produces("text/csv")
+    @Path("/get_geodata_csv")
+    public String getGDcsv2(@QueryParam("year") String y1,
+                           @QueryParam("month") String m1,
+                           @QueryParam("day") String d1,
+                            @QueryParam("year2") String y2,
+                            @QueryParam("month2") String m2,
+                            @QueryParam("day2") String d2,
+                           @QueryParam("station_id") String station_id,
+                           @QueryParam("user_id") String usr_id,
+                           @QueryParam("pwd_id") String pwd_id,
+                           @QueryParam("language") String language
+
+    ) {
+
+        return get_data_csv(y1,m1,d1,y2,m2,d2,station_id,usr_id,pwd_id,language);
     }
 
 
@@ -369,6 +390,7 @@ public class GetGeoData  extends Application {
                 dsm2.runPreparedQuery();
 
                 JSONArray jArray= new JSONArray();
+                SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
                 while(dsm2.next()){
 
@@ -385,6 +407,9 @@ public class GetGeoData  extends Application {
                         jobj.put("x_coord", coordx);
                         jobj.put("y_coord", coordy);
                     }
+
+
+                    jobj.put("data",""+formatter.format(dsm2.getData("data").getTime()));
                     jArray.add(jobj);
                 }
 
@@ -537,6 +562,8 @@ public class GetGeoData  extends Application {
 
                 retData = retData + "<name>" + station_id + "</name>";
 
+                SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                System.out.println("sqlString: "+sqlString);
                 int icount = 0;
                 while(dsm2.next()){
 
@@ -546,7 +573,7 @@ public class GetGeoData  extends Application {
                     retData = retData + "<ExtendedData>";
                     retData = retData + "<SchemaData schemaUrl=\"#"+station_id+"\">";
 
-                    retData = retData + "<SimpleData name=\"data\">" + dsm2.getString("data") + "</SimpleData>";
+                    retData = retData + "<SimpleData name=\"data\">" + formatter.format(dsm2.getData("data").getTime()) + "</SimpleData>";
                     for(int i=0; i<cp.getParamNumbers(); i++){
                         retData = retData + "<SimpleData name=\"" + cp.getParam_name().get(i) + "\">" + dsm2.getString(cp.getParam().get(i)) + "</SimpleData>";
                     }
@@ -562,6 +589,7 @@ public class GetGeoData  extends Application {
 
                     retData = retData + "</Placemark>";
 
+                    System.out.println("i: "+icount);
 
                 }
                 retData = retData + "</Folder></Document></kml>";
@@ -617,7 +645,7 @@ public class GetGeoData  extends Application {
 
         //check if there is end date
         if(y2 != null && m2 != null && d2 != null) {
-            gc2 = new GregorianCalendar(Integer.parseInt(y2),(Integer.parseInt(m2) - 1),Integer.parseInt(d2),0,0);
+            gc2 = new GregorianCalendar(Integer.parseInt(y2),(Integer.parseInt(m2) - 1),Integer.parseInt(d2),23,59);
         }else{
             gc2 = new GregorianCalendar(Integer.parseInt(y1),(Integer.parseInt(m1) - 1),Integer.parseInt(d1),23,59);
         }

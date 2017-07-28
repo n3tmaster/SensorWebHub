@@ -1670,6 +1670,71 @@ public class ChartBean implements Serializable, AppConsts{
                                             model4.addSeries(questoElem);
                                         }
                                     break;
+									case 12:
+									case 13:
+									case 14:
+										System.out.println("metto dentro model5");
+										if(seriesIn.get(i) instanceof LineChartSeries){ //|| barUsed
+											LineChartSeries questoElem = (LineChartSeries) seriesIn.get(i);
+											model5.addSeries(questoElem);
+
+										}else if(seriesIn.get(i) instanceof BarChartSeries){
+											BarChartSeries questoElem = (BarChartSeries) seriesIn.get(i);
+											model5.addSeries(questoElem);
+										}
+										break;
+									case 15:
+									case 16:
+									case 17:
+										System.out.println("metto dentro model6");
+										if(seriesIn.get(i) instanceof LineChartSeries){ //|| barUsed
+											LineChartSeries questoElem = (LineChartSeries) seriesIn.get(i);
+											model6.addSeries(questoElem);
+
+										}else if(seriesIn.get(i) instanceof BarChartSeries){
+											BarChartSeries questoElem = (BarChartSeries) seriesIn.get(i);
+											model6.addSeries(questoElem);
+										}
+										break;
+									case 18:
+									case 19:
+									case 20:
+										System.out.println("metto dentro model7");
+										if(seriesIn.get(i) instanceof LineChartSeries){ //|| barUsed
+											LineChartSeries questoElem = (LineChartSeries) seriesIn.get(i);
+											model7.addSeries(questoElem);
+
+										}else if(seriesIn.get(i) instanceof BarChartSeries){
+											BarChartSeries questoElem = (BarChartSeries) seriesIn.get(i);
+											model7.addSeries(questoElem);
+										}
+										break;
+									case 21:
+									case 22:
+									case 23:
+										System.out.println("metto dentro model8");
+										if(seriesIn.get(i) instanceof LineChartSeries){ //|| barUsed
+											LineChartSeries questoElem = (LineChartSeries) seriesIn.get(i);
+											model8.addSeries(questoElem);
+
+										}else if(seriesIn.get(i) instanceof BarChartSeries){
+											BarChartSeries questoElem = (BarChartSeries) seriesIn.get(i);
+											model8.addSeries(questoElem);
+										}
+										break;
+									case 24:
+									case 25:
+									case 26:
+										System.out.println("metto dentro model9");
+										if(seriesIn.get(i) instanceof LineChartSeries){ //|| barUsed
+											LineChartSeries questoElem = (LineChartSeries) seriesIn.get(i);
+											model9.addSeries(questoElem);
+
+										}else if(seriesIn.get(i) instanceof BarChartSeries){
+											BarChartSeries questoElem = (BarChartSeries) seriesIn.get(i);
+											model9.addSeries(questoElem);
+										}
+										break;
                                 }
                                
                             }

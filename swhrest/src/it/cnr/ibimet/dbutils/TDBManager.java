@@ -226,11 +226,17 @@ public class TDBManager extends DBManager implements DBInterface{
 	}
 	
 	public GregorianCalendar getData(int index) throws SQLException{
-	
-		
+
+
 		return Timestamp2Gregorian(dbResultSet.getTimestamp(index));
 	}
-	
+
+	public GregorianCalendar getData(String index) throws SQLException{
+
+
+		return Timestamp2Gregorian(dbResultSet.getTimestamp(index));
+	}
+
 	public double getDouble(int index)
 			throws SQLException {
 		

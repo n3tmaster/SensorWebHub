@@ -308,7 +308,7 @@ public class AdminSensorsBean implements Serializable,SWH4EConst{
                     if(adminBean.getLat().matches("")==false && adminBean.getLon().matches("")==false){
                         sqlString="insert into mobile_stations (nome, img, tipo, descrizione, id_station_type,the_geom,id_domain) "
                                 + "values "
-                                + "(?,?,?,?,?,ST_GeomFromText(POINT("+adminBean.getLon()+" "+adminBean.getLat()+"), 4326),1)";
+                                + "(?,?,?,?,?,ST_GeomFromText('POINT("+adminBean.getLon()+" "+adminBean.getLat()+")', 4326),1)";
                     }else{
                          FacesContext.getCurrentInstance().addMessage(null, 
                             new FacesMessage(FacesMessage.SEVERITY_INFO,"Attenzione!", "Le stazioni fisse devono avere le coordinate inserite!")); 

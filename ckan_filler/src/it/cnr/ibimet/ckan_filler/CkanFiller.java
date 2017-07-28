@@ -461,11 +461,12 @@ public class CkanFiller {
 
             if(dbcontext.matches("")){
                 tdb = new TDBManager("org.postgresql.Driver", this.dburl, this.dbuser, this.dbpass);
+                tdb.openConnection();
             }else{
                 tdb = new TDBManager(dbcontext);
             }
 
-            tdb.openConnection();
+
 
             String url_of_resource = "";
             String sqlString = "select id_mobile_station, tipo, nome, last_update "+
