@@ -55,7 +55,7 @@ public class GetGeoData  extends Application {
      * @param station_id station identify
      * @param usr_id username
      * @param pwd_id password
-     * @param language language adopted : "it", "en", "fr"
+     * @param language language accepted : "it", "en", "fr"
      * @return data in JSON format, point coordinates will be released in text format
      */
 
@@ -92,7 +92,7 @@ public class GetGeoData  extends Application {
      * @param station_id station identify
      * @param usr_id username
      * @param pwd_id password
-     * @param language language adopted : "it", "en", "fr"
+     * @param language language accepted : "it", "en", "fr"
      * @return data in JSON format, point coordinates will be released in text format
      */
 
@@ -132,7 +132,7 @@ public class GetGeoData  extends Application {
      * @param station_id station identify
      * @param usr_id username
      * @param pwd_id password
-     * @param language language adopted : "it", "en", "fr"
+     * @param language language accepted : "it", "en", "fr"
      * @return data in KML format
      */
 
@@ -156,6 +156,25 @@ public class GetGeoData  extends Application {
     }
 
 
+
+    /**
+     *
+     * Get geo data of specific station in KML format
+     *
+     *
+     * @param y1 beginning year
+     * @param m1 beginning month
+     * @param d1 beginning day
+     * @param y2 ending year
+     * @param m2 ending month
+     * @param d2 endig day
+     * @param station_id station identify
+     * @param usr_id username
+     * @param pwd_id password
+     * @param language language accepted : "it", "en", "fr"
+     * @return data in CSV format
+     */
+
     @GET
     @Produces("text/csv")
     @Path("/get_geodata_csv")
@@ -176,6 +195,22 @@ public class GetGeoData  extends Application {
     }
 
 
+    /**
+     *
+     * Get geo data of specific station in KML format
+     *
+     *
+     * @param y1 beginning year
+     * @param m1 beginning month
+     * @param d1 beginning day
+
+     * @param station_id station identify
+     * @param usr_id username
+     * @param pwd_id password
+     * @param language language accepted : "it", "en", "fr"
+     * @return data in CSV format using GET method
+     */
+
     @GET
     @Produces("text/csv")
     @Path("/get_geodata_csv1")
@@ -192,6 +227,22 @@ public class GetGeoData  extends Application {
         return get_data_csv(y1,m1,d1,null,null,null,station_id,usr_id,pwd_id,language);
     }
 
+
+    /**
+     *
+     * Get geo data of specific station in KML format
+     *
+     *
+     * @param y1 beginning year
+     * @param m1 beginning month
+     * @param d1 beginning day
+
+     * @param station_id station identify
+     * @param usr_id username
+     * @param pwd_id password
+     * @param language language accepted : "it", "en", "fr"
+     * @return data in CSV format using POST method
+     */
     @POST
     @Produces("text/csv")
     @Path("/get_geodata_csv1")
@@ -223,7 +274,7 @@ public class GetGeoData  extends Application {
      * @param usr_id username
      * @param pwd_id password
      * @param language language adopted : "it", "en", "fr"
-     * @return data in KML format
+     * @return data in KML format using POST method
      */
 
     @POST
@@ -246,7 +297,21 @@ public class GetGeoData  extends Application {
         return get_data_xml(y1,m1,d1,y2,m2,d2,station_id,usr_id,pwd_id,language);
     }
 
+    /**
+     *
+     * Get geo data of specific station in KML format
+     *
+     *
+     * @param y1 beginning year
+     * @param m1 beginning month
+     * @param d1 beginning day
 
+     * @param station_id station identify
+     * @param usr_id username
+     * @param pwd_id password
+     * @param language language adopted : "it", "en", "fr"
+     * @return data in KML format using GET method
+     */
 
     @GET
     @Produces("application/vnd.google-earth.kml+xml")
@@ -264,6 +329,22 @@ public class GetGeoData  extends Application {
 
         return get_data_xml(y1,m1,d1,null,null,null,station_id,usr_id,pwd_id,language);
     }
+
+
+    /**
+     *
+     * Get geo data of specific station in KML format
+     *
+     *
+     * @param y1 beginning year
+     * @param m1 beginning month
+     * @param d1 beginning day
+     * @param station_id station identify
+     * @param usr_id username
+     * @param pwd_id password
+     * @param language language adopted : "it", "en", "fr"
+     * @return data in KML format using POST method
+     */
 
     @POST
     @Produces("application/vnd.google-earth.kml+xml")
