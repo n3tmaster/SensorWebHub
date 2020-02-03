@@ -4,7 +4,10 @@ import it.cnr.ibimet.bikeclimate.dbutils.TDBManager;
 import it.cnr.ibimet.bikeclimate.entities.KMLObject;
 import it.lr.libs.DBManager.ParameterType;
 import org.primefaces.event.map.OverlaySelectEvent;
-import org.primefaces.model.map.*;
+import org.primefaces.model.map.DefaultMapModel;
+import org.primefaces.model.map.LatLng;
+import org.primefaces.model.map.MapModel;
+import org.primefaces.model.map.Marker;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -31,10 +34,8 @@ public class MapBean implements Serializable {
         public static final int TUTTE_STAZ_FISSE = 4;
 	public static final int STAZ_FOTOVOLTAIC = 6;
 	private static final long serialVersionUID = 1L;
-        //TODO: spostarlo verso il dB
-        private static final String CENTER_MAP="43.3551793,11.0290384";
-        private static final int ZOOM_BASE = 6;
-        private static final String PATH_IMG_MAP = "images/mapimg/bike_r.png";
+
+	private static final String PATH_IMG_MAP = "images/mapimg/bike_r.png";
 	private static final String PATH_IMG_MAP_CAR = "images/mapimg/bike_b.png";
 	private MapModel puntiModel;
 	private Marker marker;
@@ -170,7 +171,7 @@ public class MapBean implements Serializable {
 		String giorno,mese,anno,ora,minuto,sqlString2;
 		
 		//Controllo se sono entrato o no
-			
+		System.out.println("map updating...");
 		TDBManager dsm=null;
 			try {
 				if(loginBean.getLogged()){
@@ -179,16 +180,16 @@ public class MapBean implements Serializable {
 				
 				dsm = new TDBManager("jdbc/urbandb");
 				
-                                //controllo se clausulaWhere è null, in tal caso forzo a cercare stazioni fisse
-                                
-                                
-                                
-                               String sqlString="select id_mobile_station, nome, img, c.tipo " +
-						"from mobile_stations a ,  station_types c " + 
+				//controllo se clausulaWhere è null, in tal caso forzo a cercare stazioni fisse
+
+				String sqlString="select a.id_mobile_station, nome, img, c.tipo " +
+						"from mobile_stations a ,  station_types c, utenti_stations us " +
 						"where a.id_station_type=c.id_station_type " +
-                                                "and c.tipo " + clausulaWhere ;  //toolbarBean.createWhereString("c.tipo");
+						"and us.id_mobile_station = a.id_mobile_station " +
+						"and us.id_utente = "+loginBean.getId_user() + " " +
+                        "and c.tipo " + clausulaWhere ;  //toolbarBean.createWhereString("c.tipo");
 		 
-                                System.out.println("Stringa sql: "+sqlString);
+                System.out.println("Stringa sql: "+sqlString);
                                
 				dsm.setPreparedStatementRef(sqlString);
 			//	dsm.setParameter(ParameterType.STRING, mobileStationBeam.getMobileStationSelezionato002().getNome(), 1);
@@ -214,50 +215,50 @@ public class MapBean implements Serializable {
 				}
 				
 				
-                                switch(tipoStazioni){
+					switch(tipoStazioni){
 
-									case STAZ_MOBILI:
+						case STAZ_MOBILI:
 
-										sqlString="select ST_AsKML(a.the_geom,4),a.tair,a.co2,a.rad,a.o3,a.data " +
-												"from dati a, mobile_stations b " +
-												"where a.id_mobile_station=b.id_mobile_station and  a.id_mobile_station=? and b.id_domain="+loginBean.getId_dominio() +
-												" order by data desc limit 1";
+							sqlString="select ST_AsKML(a.the_geom,4),a.tair,a.co2,a.rad,a.o3,a.data " +
+									"from dati a, mobile_stations b " +
+									"where a.id_mobile_station=b.id_mobile_station and  a.id_mobile_station=? and b.id_domain="+loginBean.getId_dominio() +
+									" order by data desc limit 1";
 
-										break;
-									case STAZ_EDDY:
-										sqlString="select ST_AsKML(b.the_geom,4),a.tair,a.co2,a.co2_flux,a.h2o,a.data " +
-												"from dati_eddy a , mobile_stations b " +
-												"where   a.id_mobile_station=? and a.id_mobile_station=b.id_mobile_station and b.the_geom is not null  and b.id_domain="+loginBean.getId_dominio() +
-												" order by data desc limit 1";
-										break;
-									case STAZ_FISSE:
-									case TUTTE_STAZ_FISSE:
-										sqlString="select ST_AsKML(b.the_geom,4),a.tair,a.co2,a.rad,a.o3,a.data " +
-												"from dati_stazioni_fisse a, mobile_stations b " +
-												"where  a.id_mobile_station=? and a.id_mobile_station=b.id_mobile_station and b.the_geom is not null  and b.id_domain="+loginBean.getId_dominio() +
-												" order by data desc limit 1";
-										break;
+							break;
+						case STAZ_EDDY:
+							sqlString="select ST_AsKML(b.the_geom,4),a.tair,a.co2,a.co2_flux,a.h2o,a.data " +
+									"from dati_eddy a , mobile_stations b " +
+									"where   a.id_mobile_station=? and a.id_mobile_station=b.id_mobile_station and b.the_geom is not null  and b.id_domain="+loginBean.getId_dominio() +
+									" order by data desc limit 1";
+							break;
+						case STAZ_FISSE:
+						case TUTTE_STAZ_FISSE:
+							sqlString="select ST_AsKML(b.the_geom,4),a.tair,a.co2,a.rad,a.o3,a.data " +
+									"from dati_stazioni_fisse a, mobile_stations b " +
+									"where  a.id_mobile_station=? and a.id_mobile_station=b.id_mobile_station and b.the_geom is not null  and b.id_domain="+loginBean.getId_dominio() +
+									" order by data desc limit 1";
+							break;
 
-									case STAZ_RINNOVABILI:  //TODO : to be change
-									
-										sqlString="select ST_AsKML(b.the_geom,4),a.tair_ext,a.hum_ext,a.energy_consuption,a.woodchips,a.data " +
-												"from  dati_swe a, mobile_stations b " +
-												"where  a.id_mobile_station=? and a.id_mobile_station=b.id_mobile_station and b.the_geom is not null  and b.id_domain="+loginBean.getId_dominio() +
-												" order by data desc limit 1";
+						case STAZ_RINNOVABILI:  //TODO : to be change
+
+							sqlString="select ST_AsKML(b.the_geom,4),a.tair_ext,a.hum_ext,a.energy_consuption,a.woodchips,a.data " +
+									"from  dati_swe a, mobile_stations b " +
+									"where  a.id_mobile_station=? and a.id_mobile_station=b.id_mobile_station and b.the_geom is not null  and b.id_domain="+loginBean.getId_dominio() +
+									" order by data desc limit 1";
 
 
 
-										break;
+							break;
 
-									case STAZ_FOTOVOLTAIC:  //TODO : to be change
+						case STAZ_FOTOVOLTAIC:  //TODO : to be change
 
-										sqlString="select ST_AsKML(b.the_geom,4),upv_lst, pac,upv_soll, e_total,a.data " +
-												"from  dati_fotovoltaico a, mobile_stations b " +
-												"where  a.id_mobile_station=? and a.id_mobile_station=b.id_mobile_station and b.the_geom is not null  and b.id_domain="+loginBean.getId_dominio() +
-												" order by data desc limit 1";
-                               			break;
-                                }
-                                System.out.println("mapBean : "+sqlString);
+							sqlString="select ST_AsKML(b.the_geom,4),upv_lst, pac,upv_soll, e_total,a.data " +
+									"from  dati_fotovoltaico a, mobile_stations b " +
+									"where  a.id_mobile_station=? and a.id_mobile_station=b.id_mobile_station and b.the_geom is not null  and b.id_domain="+loginBean.getId_dominio() +
+									" order by data desc limit 1";
+							break;
+					}
+					System.out.println("mapBean : "+sqlString);
                                 
 				dsm.setPreparedStatementRef(sqlString);
 				for(int i=0; i<id_a.size();i++){
@@ -322,12 +323,15 @@ public class MapBean implements Serializable {
 				
 					//this.centerX=minLong+((maxLong-minLong)/2);
 					//this.centerY=minLat+((maxLat-minLat)/2);
-					this.zoomFactor=ZOOM_BASE;
+
+
+
+					this.zoomFactor=(int)loginBean.getZoomfactor();
 					
-					this.centerMap= CENTER_MAP;
+					this.centerMap= ""+loginBean.getCenter_y()+","+loginBean.getCenter_x();
 					
-                    //                    System.out.println("centerMap: "+this.centerMap);
-                    //                    System.out.println("zoomFactor: "+this.zoomFactor);
+                                       System.out.println("centerMap: "+this.centerMap);
+                                        System.out.println("zoomFactor: "+this.zoomFactor);
 					
 					if(iCount==0){
 						FacesContext.getCurrentInstance().addMessage(null, 
@@ -358,81 +362,6 @@ public class MapBean implements Serializable {
 	   
 	//	viewTracks();
 		
-	}
-	public void viewTracks(){
-		TDBManager dsm=null;
-		TDBManager dsm2=null;
-		try {
-			if(loginBean.getLogged()){
-				
-				
-			
-				dsm = new TDBManager("jdbc/urbandb");
-			
-			
-			
-				String sqlString="select trackname, data_start, data_end,id_mobile_station from tracks";
-				
-	
-				dsm.setPreparedStatementRef(sqlString);
-				dsm.runPreparedQuery();
-			
-				GregorianCalendar gc1, gc2;
-				int id_mobile_station;
-				while(dsm.next()){
-					//Prelevo il primo track
-					
-					gc1=dsm.getData(2);
-					gc2=dsm.getData(3);
-					id_mobile_station=dsm.getInteger(4);
-					
-					dsm2 = new TDBManager("jdbc/urbandb");
-					String sqlString2="select ST_AsKML(the_geom,4) from dati a " +
-							"where  "+
-							"data between ? and ? and id_mobile_station=?";
-			
-					dsm2.setPreparedStatementRef(sqlString2);
-					dsm2.setParameter(ParameterType.DATE, gc1, 1);
-					dsm2.setParameter(ParameterType.DATE, gc2, 2);
-					dsm2.setParameter(ParameterType.INT,""+id_mobile_station,3);
-					dsm2.runPreparedQuery();
-					
-					Polyline questaLinea = new Polyline();
-					while(dsm2.next()){
-						KMLObject questoKML = new KMLObject(dsm2.getString(1));
-						questaLinea.getPaths().add(new LatLng(questoKML.getLatitudine().get(0),questoKML.getLongitudine().get(0)));
-					}
-					questaLinea.setStrokeWeight(8);  
-					questaLinea.setStrokeColor("#FF9900");  
-					
-					puntiModel.addOverlay(questaLinea);
-				
-					
-				}
-				
-				
-			}
-			
-			
-			
-		
-		
-		
-		} catch (Exception e) {
-		
-			e.printStackTrace();
-		}finally{
-			try {
-				dsm2.closeConnection();
-				dsm.closeConnection();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-		}
-	    
-	   
-	
 	}
 
 	public void onMarkerSelect(OverlaySelectEvent event){

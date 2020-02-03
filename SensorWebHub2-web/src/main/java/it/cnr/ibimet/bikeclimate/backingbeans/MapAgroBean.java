@@ -144,11 +144,12 @@ public class MapAgroBean implements Serializable {
 				dsm = new TDBManager("jdbc/imetnetdb");
 				
 				
-                                String sqlString="select ST_AsKML(s.the_geom,4), a.nome_azienda, e.nome_ente "
-                                        + "from stazioni s, aziende a, enti e "
-                                        + "where s.id_azienda=a.id_azienda "
-                                        + "and   s.id_ente=e.id_ente";
-		
+					String sqlString="select ST_AsKML(s.the_geom,4), a.nome_azienda, e.nome_ente "
+							+ "from stazioni s, aziende a, enti e "
+							+ "where s.id_azienda=a.id_azienda "
+							+ "and   s.id_ente=e.id_ente";
+
+
 				dsm.setPreparedStatementRef(sqlString);
 				dsm.runPreparedQuery();
 			//	boolean firstime=true;

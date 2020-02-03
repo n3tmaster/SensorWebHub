@@ -41,7 +41,7 @@
                                 <p:commandButton id="editStation"
                                                  action="#{mobileStationBean.openEdit}"
                                                  value="..."
-                                                 disabled="#{loginBean.disabledEditBtn}">
+                                                 style="display: #{loginBean.enableAtivateBtn}" >
                                     <f:setPropertyActionListener value="#{mStationM2.id_mobile_station}" target="#{mobileStationBean.passedId}" />
                                 </p:commandButton>
                             </p:column>

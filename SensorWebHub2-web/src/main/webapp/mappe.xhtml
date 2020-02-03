@@ -10,6 +10,7 @@
 
     <p:commandButton id="updMappa"
                      value="Aggiorna la Mappa"
+                     binding="#{updMappa}"
                      actionListener="#{mapUrbanBean.popolaUltimiMappa}"
                      update=":#{oggettoMappa.clientId} "/>
 
@@ -32,3 +33,4 @@
     </p:gmap>
 
 </ui:composition>
+

@@ -10,8 +10,10 @@ import org.json.simple.JSONObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
@@ -879,4 +881,207 @@ public class GetGeoData  extends Application {
 
 
     }
+
+
+    /**
+     * Get nearest data and station (fixed) from given point
+     *
+     * @return
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/j_get_nearest_data/{year_from}/{doy_from}/{n_days}/{language}{polygon:(/polygon/.+?)?}{srid_from:(/srid_from/.+?)?}{radius:(/radius/.+?)?}")
+    public Response extractNearestData(@PathParam("year_from") String year_from,
+                                           @PathParam("doy_from") String doy_from,
+                                           @PathParam("n_days") String n_days,
+                                           @PathParam("language") String language,
+                                           @PathParam("polygon") String polygon,
+                                           @PathParam("srid_from") String srid_from,
+                                       @PathParam("radius") String radius
+    ) {
+
+        TDBManager tdb=null,tdb_agro=null;
+        String sqlString=null, retData = null , station_name = null;
+        int id_station;
+        double x, y, distance;
+        String ws="";
+        String radiusstr ="";
+        GregorianCalendar gc = new GregorianCalendar();
+        GregorianCalendar gc2 = new GregorianCalendar();
+
+        gc.set(Calendar.YEAR, Integer.parseInt(year_from));
+        gc.set(Calendar.HOUR_OF_DAY,0);
+        gc.set(Calendar.MINUTE,0);
+        gc.set(Calendar.SECOND,0);
+        gc.set(Calendar.MILLISECOND,0);
+        gc.set(Calendar.DAY_OF_YEAR, Integer.parseInt(doy_from));
+
+        gc2.set(Calendar.YEAR, Integer.parseInt(year_from));
+        gc2.set(Calendar.HOUR_OF_DAY,23);
+        gc2.set(Calendar.MINUTE,59);
+        gc2.set(Calendar.SECOND,0);
+        gc2.set(Calendar.MILLISECOND,0);
+        gc2.set(Calendar.DAY_OF_YEAR, Integer.parseInt(doy_from));
+
+        gc2.add(Calendar.DAY_OF_YEAR,Integer.parseInt(n_days));
+
+        if(radius.matches("") || radius == null){
+            radiusstr = radius;
+        }else{
+            radiusstr = "10000";
+        }
+
+
+        try {
+
+            tdb = new TDBManager("jdbc/urbandb");
+            tdb_agro = new TDBManager("jdbc/imetnetdb");
+
+
+            sqlString="SELECT id_mobile_station, ST_X(the_geom), ST_Y(the_geom), nome, ws "+
+                    "ST_Distance_sphere(the_geom,ST_Transform(ST_GeomFromText('"+polygon.split("/")[2]+"',"+srid_from.split("/")[2]+"),4326)) " +
+                    "FROM mobile_stations " +
+                    "WHERE id_domain=2 " +
+                    "AND ST_Distance_sphere(the_geom,ST_Transform(ST_GeomFromText('"+polygon.split("/")[2]+"',"+srid_from.split("/")[2]+"),4326)) <= "+radiusstr + " "+
+                    "ORDER BY the_geom <#> ST_Transform(ST_GeomFromText('"+polygon.split("/")[2]+"',"+srid_from.split("/")[2]+"),4326) LIMIT 1";
+
+            System.out.println(sqlString);
+
+            tdb.setPreparedStatementRef(sqlString);
+
+            tdb.runPreparedQuery();
+
+            if (tdb.next()) {
+                id_station = tdb.getInteger(1);
+                x = tdb.getDouble(2);
+                y = tdb.getDouble(3);
+                station_name = tdb.getString(4);
+                distance = tdb.getDouble(5);
+                ws = tdb.getString(6);
+
+
+                if(ws.matches("") || ws == null){
+                    //Check station type and get fields
+                    TableSchema tSchema = new TableSchema(tdb, FIXED_DATA_TABLE);
+
+
+                    ChartParams cp = new ChartParams(tdb, id_station,language );
+                    cp.getTableParams(); //prepare table params
+
+
+                    String selectStr ="";
+
+                    for(int i=0; i<cp.getParamNumbers(); i++){
+                        selectStr = selectStr + cp.getSQL_SelectStr(i,"numeric", "a.", 2) + " as "+cp.getParam().get(i) + ",";
+                    }
+
+                    System.out.println("id_stazione: "+station_name);
+                    System.out.println("From : "+gc.get(Calendar.DAY_OF_MONTH) + "-"+gc.get(Calendar.MONTH) + "-" +gc.get(Calendar.YEAR) + " "+gc.get(Calendar.HOUR_OF_DAY) + ":"+gc.get(Calendar.MINUTE));
+                    System.out.println("to : "+gc2.get(Calendar.DAY_OF_MONTH) + "-"+gc2.get(Calendar.MONTH) + "-" +gc2.get(Calendar.YEAR)+ " "+gc2.get(Calendar.HOUR_OF_DAY) + ":"+gc2.get(Calendar.MINUTE));
+
+
+                    //get data with geographical information
+                    sqlString="select "+selectStr+"a.data as data "
+                            + "from dati a "
+                            + "where "
+                            + "a.id_stazione=? "
+                            + "and a.data between ? and ? "
+                            + "order by a.data";
+
+
+                    System.out.println("SQL : "+sqlString);
+
+                    tdb_agro.setPreparedStatementRef(sqlString);
+                    tdb_agro.setParameter(DBManager.ParameterType.STRING, ""+station_name, 1);
+                    tdb_agro.setParameter(DBManager.ParameterType.DATE, gc, 2);
+                    tdb_agro.setParameter(DBManager.ParameterType.DATE, gc2, 3);
+
+                    tdb_agro.runPreparedQuery();
+                    JSONObject jobjRoot = new JSONObject();
+
+                    JSONArray jArrayData= new JSONArray();
+                    SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                    jobjRoot.put("station",station_name);
+                    jobjRoot.put("x_coord", x);
+                    jobjRoot.put("y_coord", y);
+                    jobjRoot.put("distance", distance);
+                    //        System.out.println("start ---------- ");
+                    while(tdb_agro.next()){
+
+                        JSONObject jobj = new JSONObject();
+
+                        //         System.out.println("Param number" + cp.getParamNumbers());
+                        for(int i=0; i<cp.getParamNumbers(); i++){
+                            System.out.println(cp.getParam_name().get(i)+" "+tdb_agro.getString(cp.getParam().get(i)));
+
+                            jobj.put(cp.getParam_name().get(i), tdb_agro.getString(cp.getParam().get(i)));
+                        }
+
+
+                        jobj.put("data",""+formatter.format(tdb_agro.getData("data").getTime()));
+                        jArrayData.add(jobj);
+                    }
+
+                    jobjRoot.put("data",jArrayData);
+
+
+                    retData = jobjRoot.toJSONString();
+                    System.out.println("retCode: "+retData);
+                }else{
+                    //TODO: da rendere generalizzato alla prossima release
+                    HttpURLManager huM = new HttpURLManager(ws + "&from="+gc.get(Calendar.YEAR)+"-"+String.format("%02d",(gc.get(Calendar.MONTH) + 1))+"-"+String.format("%02d",gc.get(Calendar.DAY_OF_WEEK)) +
+                            "&to="+gc2.get(Calendar.YEAR)+"-"+String.format("%02d",(gc2.get(Calendar.MONTH) + 1))+"-"+String.format("%02d",gc2.get(Calendar.DAY_OF_WEEK)));
+
+                    retData = huM.sendGet();
+
+
+                }
+
+
+            }else{
+
+                JSONObject jobjRoot = new JSONObject();
+                retData = jobjRoot.toJSONString();
+
+                System.out.println("retCode nulla: "+retData);
+
+               
+            }
+
+        }catch(Exception e){
+            System.out.println("Error  : "+e.getMessage());
+
+            try{
+                tdb.closeConnection();
+            }catch (Exception ee){
+                System.out.println("Error "+ee.getMessage());
+            }
+            try{
+                tdb_agro.closeConnection();
+            }catch (Exception ee){
+                System.out.println("Error "+ee.getMessage());
+            }
+            return Response.status(500).entity(e.getMessage()).build();
+        }finally {
+            try{
+                tdb.closeConnection();
+            }catch (Exception ee){
+                System.out.println("Error "+ee.getMessage());
+            }
+            try{
+                tdb_agro.closeConnection();
+            }catch (Exception ee){
+                System.out.println("Error "+ee.getMessage());
+            }
+        }
+
+
+        Response.ResponseBuilder responseBuilder = Response.ok(retData);
+
+        return responseBuilder.build();
+
+    }
+
+
 }

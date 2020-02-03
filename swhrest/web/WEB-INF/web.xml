@@ -6,7 +6,6 @@
     <servlet>
         <servlet-name>SWH Rest Services</servlet-name>
         <servlet-class>
-
             com.sun.jersey.spi.container.servlet.ServletContainer
         </servlet-class>
         <init-param>

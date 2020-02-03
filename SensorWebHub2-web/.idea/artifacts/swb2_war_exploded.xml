@@ -1,0 +1,29 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="swb2:war exploded">
+    <output-path>$PROJECT_DIR$/target/swb2-3</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="swb2" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: it.lr:utils:1" />
+          <element id="library" level="project" name="Maven: commons-fileupload:commons-fileupload:1.3" />
+          <element id="library" level="project" name="Maven: cocoon:cocoon-itext:2.1.7" />
+          <element id="library" level="project" name="Maven: commons-io:commons-io:2.2" />
+          <element id="library" level="project" name="Maven: org.apache.poi:poi:3.13" />
+          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.9" />
+          <element id="library" level="project" name="Maven: primefaces-swh2-theme:primefaces-swh2-theme:1" />
+          <element id="library" level="project" name="Maven: javax.mail:mail:1.4.5" />
+          <element id="library" level="project" name="Maven: org.primefaces:primefaces:6.0" />
+          <element id="library" level="project" name="Maven: com.sun.faces:jsf-api:2.2.2" />
+          <element id="library" level="project" name="Maven: com.sun.faces:jsf-impl:2.2.2" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/target/swb2-3/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="swb2/web/Web" />
+    </root>
+  </artifact>
+</component>

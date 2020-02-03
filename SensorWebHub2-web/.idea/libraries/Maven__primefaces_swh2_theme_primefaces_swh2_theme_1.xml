@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: primefaces-swh2-theme:primefaces-swh2-theme:1">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/primefaces-swh2-theme/primefaces-swh2-theme/1/primefaces-swh2-theme-1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/primefaces-swh2-theme/primefaces-swh2-theme/1/primefaces-swh2-theme-1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/primefaces-swh2-theme/primefaces-swh2-theme/1/primefaces-swh2-theme-1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

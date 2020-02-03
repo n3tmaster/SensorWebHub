@@ -109,13 +109,15 @@ public class FotovoltaicBean implements Serializable {
 
 
                     
-                    String sqlString="select id_mobile_station, nome,img, descrizione " +
-                            "from mobile_stations a, station_types b where a.id_station_type=b.id_station_type and id_domain=? and b.tipo "+clausulaWhere+" order by 2";
+                    String sqlString="select a.id_mobile_station, nome,img, descrizione " +
+                            "from mobile_stations a, station_types b , utenti_stations us " +
+                            "where us.id_utente=? and a.id_mobile_station= us.id_mobile_station and a.id_station_type=b.id_station_type and id_domain=? and b.tipo "+clausulaWhere+" order by 2";
 
                     System.out.println("SQL: "+sqlString);
                     
                     dsm.setPreparedStatementRef(sqlString);
-                    dsm.setParameter(DBManager.ParameterType.INT, ""+loginBean.getId_dominio(), 1);
+                    dsm.setParameter(DBManager.ParameterType.INT, ""+loginBean.getId_user(), 1);
+                    dsm.setParameter(DBManager.ParameterType.INT, ""+loginBean.getId_dominio(), 2);
                     dsm.runPreparedQuery();
                     fotolist = new ArrayList<Fotovoltaic>();
 

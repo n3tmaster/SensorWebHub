@@ -77,7 +77,6 @@ public class TDBManager extends DBManager implements DBInterface{
 	        return (result);
 	}
 
-	@Override
 	public ResultSet performQuery(String queryStr) throws SQLException {
 		this.dbPStmt=this.dbConnection.prepareStatement(queryStr);
 
@@ -87,19 +86,16 @@ public class TDBManager extends DBManager implements DBInterface{
 	public void commit() throws SQLException{
 		dbConnection.commit();
 	}
-	@Override
 	public boolean performInsert() throws SQLException {
 
 		return dbPStmt.execute();
 	}
 
-	@Override
 	public boolean performDelete(String deleteStr) throws SQLException {
 
 		return false;
 	}
 
-	@Override
 	public void setPreparedStatementRef(String queryStr) throws SQLException {
 		this.dbPStmt=this.dbConnection.prepareStatement(queryStr);
 
@@ -111,7 +107,6 @@ public class TDBManager extends DBManager implements DBInterface{
 		this.dbPStmt.setBoolean(index, param);
 	}
 
-	@Override
 	public void setParameter(ParameterType pType, String param, int index)
 			throws SQLException {
 		switch(pType){

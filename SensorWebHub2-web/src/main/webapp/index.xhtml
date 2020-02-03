@@ -22,10 +22,6 @@
 
         <p:growl id="growl" showDetail="true" life="3000" />
 
-
-
-
-
         <p:dialog header="SensorWebHub - Credits" widgetVar="questoDlg" showEffect="explode" modal="true" hideEffect="explode" height="350">  
 
             <h:outputText value="Project Manager" style="color:#666666;font-size:large;"/>  
@@ -155,10 +151,6 @@
 
                 </div>
                 <div style="margin-left: 0px; position: relative; width: 960px; z-index: 5; " id="body_layer">
-
-
-
-
                     <div style="height: 1px; line-height: 1px; " class="tinyText"> </div>
                     <div class="graphic_generic_body_textbox_style_default" style="margin-left: 37px; margin-top: 1651px; position: relative; width: 630px; z-index: 1; ">
                         <div>
@@ -170,7 +162,6 @@
                         </div>
                     </div>
 
-
                     <img src="images/shapeimage_5.png" title="" id="id11" style="height: 422px; left: 27px; position: absolute; top: 129px; width: 897px; z-index: 1; " />
 
 
@@ -181,10 +172,6 @@
                             </div>
                         </div>
                     </div>
-
-
-
-
 
                     <p:commandLink id="btnagrometeo" 
                                    action="#{loginBean.doAgroMeteo}"
@@ -217,11 +204,8 @@
                                    width: 122px; 
                                    z-index: 1; ">  
                         <h:graphicImage id="imgmeteo" binding="#{imgmeteo}" url="#{loginBean.doMeteoURL}" 
-                                        style="border: none; 
-
-
-                                        width: 122px; 
-                                        "/>
+                                        style="border: none;
+                                        width: 122px;"/>
                     </p:commandLink>   
 
                     <p:commandLink id="btnclimaurbano" 
@@ -322,15 +306,13 @@
                                     </f:facet>
 
                                 </p:panelGrid>
-
-
-                            </h:form></div>
+                            </h:form>
+                        </div>
                     </div>
                 </div>
             </div>
 
         </div>
-
 
     </h:body>
 </f:view>

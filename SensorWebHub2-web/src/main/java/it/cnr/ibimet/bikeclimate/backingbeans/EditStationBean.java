@@ -29,6 +29,7 @@ public class EditStationBean implements Serializable, SWH4EConst {
 
     private static final long serialVersionUID = 1L;
 
+    private int passedId;  //used for parameter management
     private String stationName;
 
     private String stationDescr;
@@ -107,7 +108,13 @@ public class EditStationBean implements Serializable, SWH4EConst {
         this.stationName = stationName;
     }
 
+    public int getPassedId() {
+        return passedId;
+    }
 
+    public void setPassedId(int passedId) {
+        this.passedId = passedId;
+    }
 
     public String getStationDescr() {
         return stationDescr;
@@ -200,20 +207,24 @@ public class EditStationBean implements Serializable, SWH4EConst {
 
         TDBManager dsm=null;
 
+        loadStationType();
         try {
             if(loginBean.getLogged()){
 
                 dsm = new TDBManager("jdbc/urbandb");
 
                 //Load Macro types
-                String sqlString="select ms.nome, ms.tipo, ms.descrizione," +
-                        "m.responsabile, m.data_registrazione,m.descrizione," +
-                        "m.email,st.tipo, st_x(the_geom), st_y(the_geom)" +
-                        "from mobile_stations ms, metadati m," +
-                        "station_types st" +
-                        "where ms.id_mobile_station = m.id_mobile_station" +
-                        "and   ms.id_station_type = st.id_station_type" +
+                String sqlString="select ms.nome, ms.tipo, ms.descrizione, " +
+                        "m.responsabile, m.data_registrazione,m.descrizione, " +
+                        "m.email,st.tipo, st_x(the_geom), st_y(the_geom), mt.description " +
+                        "from mobile_stations ms, metadati m, " +
+                        "station_types st, macro_types mt " +
+                        "where ms.id_mobile_station = m.id_mobile_station " +
+                        "and   ms.id_station_type = st.id_station_type " +
+                        "and   ms.tipo = mt.macro_type "+
                         "and   ms.id_mobile_station = ?";
+
+                System.out.println("passedID: "+mobileStationBean.getPassedId());
 
                 dsm.setPreparedStatementRef(sqlString);
                 dsm.setParameter(DBManager.ParameterType.INT,""+mobileStationBean.getPassedId(),1);
@@ -222,7 +233,7 @@ public class EditStationBean implements Serializable, SWH4EConst {
                 while(dsm.next()){
 
                     this.stationName = dsm.getString(1);
-                    this.selectedMacroType = dsm.getString(9);
+                    this.selectedMacroType = dsm.getString(11);
                     this.stationDescr = dsm.getString(3);
                     this.stationResponsible = dsm.getString(4);
                     GregorianCalendar gc = dsm.getData(5);
@@ -254,7 +265,6 @@ public class EditStationBean implements Serializable, SWH4EConst {
         }
 
 
-        loadStationType();
     }
 
     public void loadStationType(){
@@ -278,7 +288,7 @@ public class EditStationBean implements Serializable, SWH4EConst {
                     this.stationTypes.put(dsm.getString(2),""+dsm.getInteger(1));
                 }
 
-                this.selectedStationType = this.stationTipo;
+              //  this.selectedStationType = this.stationTipo;
 
             }else{
                 System.out.println("Utente non loggato");

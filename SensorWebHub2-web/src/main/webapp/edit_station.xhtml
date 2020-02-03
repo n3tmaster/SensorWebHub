@@ -37,20 +37,19 @@
             <p:panel id="panel" header="Nuova Stazione" style="margin-bottom:10px;">
 
                 <h:panelGrid columns="2" cellpadding="5">
-                    <p:outputLabel value="ID Stazione: #{editStationBean.stationName}" />
+                    <p:outputLabel value="ID Stazione:" />
+                    <p:outputLabel value="#{editStationBean.stationName}" />
 
 
                     <p:outputLabel for="description" value="Nome Esteso: " />
                     <p:inputText id="description"  value="#{editStationBean.stationDescr}" />
 
-                    <p:outputLabel value="Macro Tipologia: #{editStationBean.selectedMacroType}"/>
+                    <p:outputLabel value="Macro Tipologia:"/>
+                    <p:outputLabel value="#{editStationBean.selectedMacroType}"/>
 
+                    <p:outputLabel value="Specializzazione: " />
+                    <p:outputLabel value="#{editStationBean.stationTipo}" />
 
-                    <p:outputLabel value="Specializzazione: " for="stationTypeIn" />
-                    <p:selectOneMenu  id="stationTypeIn" value="#{editStationBean.selectedStationType}">
-                        <f:selectItem itemLabel="Select Type" itemValue="-1" noSelectionOption="false" />
-                        <f:selectItems value="#{editStationBean.stationTypes}" />
-                    </p:selectOneMenu>
 
                     <p:outputLabel for="latIn" value="Latitudine:" />
                     <p:inputText id="latIn" required="false"  value="#{editStationBean.lat}" >
@@ -58,7 +57,6 @@
                     </p:inputText>
 
                     <p:outputLabel for="longIn" value="Longitudine:"/>
-
                     <p:inputText id="longIn"  value="#{editStationBean.lon}" >
                         <f:validateDoubleRange minimum="-180.00" maximum="180.00" />
                     </p:inputText>
@@ -74,7 +72,7 @@
                     <p:calendar id="dataregistrazione"  value="#{editStationBean.stationDataReg}"/>
 
                     <p:outputLabel for="metaDescr" value="Metadati: *" />
-                    <p:editor id="metaDescr" value="#{editStationBean.metaDescr}"/>
+                    <p:editor id="metaDescr" value="#{editStationBean.stationMetadata}"/>
 
 
                 </h:panelGrid>

@@ -241,47 +241,47 @@ public class BikeDataBean implements Serializable,SWH4EConst {
                 
 		try {
                     
-                    SimpleDateFormat formatter=new SimpleDateFormat("dd-MM-yyyy HH");   //
-                    
-                    dsm = new TDBManager("jdbc/urbandb");
-                    
-                    
-                    TableSchema tSchema = new TableSchema(dsm, "dati");
-                        
-                    System.out.println("Ecco la stazione "+mobileStationBean.getMobileStationSelezionato003().getId_mobile_station());
-                    ChartParams cp = new ChartParams(dsm, mobileStationBean.getMobileStationSelezionato003().getId_mobile_station(), loginBean.getLingua());
-                        cp.getTableParams(); //prepare table params
-                        
-                        
-                        
-               
-                        
-                        String selectStr="";
-                        
-                        for(int i=0; i<cp.getParamNumbers(); i++){
-                            selectStr = selectStr + cp.getSQL_SelectStr(i,"numeric", "a.", 2, cp.getParam().get(i),true) + ",";
-                        }
-			
-			selectStr="select "+selectStr+"b.nome as nome,date_trunc('hour', a.data) as dataOut "
-					+ "from dati a, mobile_stations b " 
-					+ "where a.id_mobile_station=b.id_mobile_station and a.id_mobile_station=? group by nome, dataOut   order by dataOut desc";
-	
-                        columnsStat = new ArrayList<ColumnModel>();
-                        datiStat =  new ArrayList<Map<String, String>>();
-                        
-                        //create table schema 
-                        //TODO: make column name dinamic
-                        columnsStat.add(new ColumnModel("Data e Ora","data"));
-                        columnsStat.add(new ColumnModel("Nome","nome"));
-                        for(int i=0; i<cp.getParamNumbers(); i++){
-                          
-                            columnsStat.add(new ColumnModel(cp.getParam_name().get(i)+ "- Min "+cp.getUnit().get(i),"min"+cp.getParam().get(i)));
-                            columnsStat.add(new ColumnModel(cp.getParam_name().get(i)+ "- Max "+cp.getUnit().get(i),"max"+cp.getParam().get(i)));
-                            columnsStat.add(new ColumnModel(cp.getParam_name().get(i)+ "- Avg "+cp.getUnit().get(i),"avg"+cp.getParam().get(i)));
-                        }
-                        
-                        dsm.setPreparedStatementRef(selectStr);
-			
+			SimpleDateFormat formatter=new SimpleDateFormat("dd-MM-yyyy HH");   //
+
+			dsm = new TDBManager("jdbc/urbandb");
+
+
+			TableSchema tSchema = new TableSchema(dsm, "dati");
+
+			System.out.println("Ecco la stazione "+mobileStationBean.getMobileStationSelezionato003().getId_mobile_station());
+			ChartParams cp = new ChartParams(dsm, mobileStationBean.getMobileStationSelezionato003().getId_mobile_station(), loginBean.getLingua());
+				cp.getTableParams(); //prepare table params
+
+
+
+
+
+				String selectStr="";
+
+				for(int i=0; i<cp.getParamNumbers(); i++){
+					selectStr = selectStr + cp.getSQL_SelectStr(i,"numeric", "a.", 2, cp.getParam().get(i),true) + ",";
+				}
+
+				selectStr="select "+selectStr+"b.nome as nome,date_trunc('hour', a.data) as dataOut "
+				+ "from dati a, mobile_stations b "
+				+ "where a.id_mobile_station=b.id_mobile_station and a.id_mobile_station=? group by nome, dataOut   order by dataOut desc";
+
+				columnsStat = new ArrayList<ColumnModel>();
+				datiStat =  new ArrayList<Map<String, String>>();
+
+				//create table schema
+				//TODO: make column name dinamic
+				columnsStat.add(new ColumnModel("Data e Ora","data"));
+				columnsStat.add(new ColumnModel("Nome","nome"));
+				for(int i=0; i<cp.getParamNumbers(); i++){
+
+					columnsStat.add(new ColumnModel(cp.getParam_name().get(i)+ "- Min "+cp.getUnit().get(i),"min"+cp.getParam().get(i)));
+					columnsStat.add(new ColumnModel(cp.getParam_name().get(i)+ "- Max "+cp.getUnit().get(i),"max"+cp.getParam().get(i)));
+					columnsStat.add(new ColumnModel(cp.getParam_name().get(i)+ "- Avg "+cp.getUnit().get(i),"avg"+cp.getParam().get(i)));
+				}
+
+				dsm.setPreparedStatementRef(selectStr);
+
 			dsm.setParameter(ParameterType.INT, ""+mobileStationBean.getMobileStationSelezionato003().getId_mobile_station(), 1);
 			
 			
@@ -592,7 +592,7 @@ public class BikeDataBean implements Serializable,SWH4EConst {
 					}
 				}
 				
-				byte b[]=ostream.toByteArray();
+				byte[] b =ostream.toByteArray();
 				
 				InputStream is = new ByteArrayInputStream(b);
 				

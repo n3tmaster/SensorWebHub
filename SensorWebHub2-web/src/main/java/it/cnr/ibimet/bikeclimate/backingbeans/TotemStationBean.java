@@ -130,13 +130,15 @@ public class TotemStationBean implements Serializable {
 
 
 
-                    String sqlString="select id_mobile_station, nome,img, descrizione, activated, external " +
-                            "from mobile_stations a, station_types b where a.id_station_type=b.id_station_type and id_domain=? and b.tipo "+clausulaWhere+" order by 5 desc,2 asc";
+                    String sqlString="select a.id_mobile_station, nome,img, descrizione, activated, external " +
+                            "from mobile_stations a, station_types b, , utenti_stations us " +
+							"where us.id_utente=? and a.id_mobile_station= us.id_mobile_station and  a.id_station_type=b.id_station_type and id_domain=? and b.tipo "+clausulaWhere+" order by 5 desc,2 asc";
 
 					dsm2.setPreparedStatementRef("select webservice, fromdate, operation_type from interoperability where id_mobile_station = ?");
 
 					dsm.setPreparedStatementRef(sqlString);
-                    dsm.setParameter(DBManager.ParameterType.INT, ""+loginBean.getId_dominio(), 1);
+					dsm.setParameter(DBManager.ParameterType.INT, ""+loginBean.getId_user(), 1);
+                    dsm.setParameter(DBManager.ParameterType.INT, ""+loginBean.getId_dominio(), 2);
                     dsm.runPreparedQuery();
                     totemstationlist = new ArrayList<Totem>();
 

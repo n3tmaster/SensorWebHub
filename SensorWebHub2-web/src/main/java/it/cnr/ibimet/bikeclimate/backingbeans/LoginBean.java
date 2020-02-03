@@ -55,6 +55,8 @@ public class LoginBean implements Serializable, SWH4EConst{
 	private int livello;
 	private String adminstatus;
 	private String lingua;
+	private double zoomfactor, center_x, center_y;
+	private int id_user;
 
 	public LoginBean(){
 		System.out.println("sono in costruttore");
@@ -116,7 +118,39 @@ public class LoginBean implements Serializable, SWH4EConst{
         this.dominiohide = dominiohide;
     }
 
-    public void goAdmin(){
+	public int getId_user() {
+		return id_user;
+	}
+
+	public void setId_user(int id_user) {
+		this.id_user = id_user;
+	}
+
+	public double getZoomfactor() {
+		return zoomfactor;
+	}
+
+	public void setZoomfactor(double zoomfactor) {
+		this.zoomfactor = zoomfactor;
+	}
+
+	public double getCenter_x() {
+		return center_x;
+	}
+
+	public void setCenter_x(double center_x) {
+		this.center_x = center_x;
+	}
+
+	public double getCenter_y() {
+		return center_y;
+	}
+
+	public void setCenter_y(double center_y) {
+		this.center_y = center_y;
+	}
+
+	public void goAdmin(){
 
         if(livello>=5){
             System.out.println("go ADMIN");
@@ -263,7 +297,8 @@ public class LoginBean implements Serializable, SWH4EConst{
 
 				System.out.println("LoginBean - main - connessione aperta");
 
-				String sqlString="select livello,id_utente, id_domain " +
+				String sqlString="select livello, id_utente, "+
+							"id_domain, ST_X(center), ST_Y(center), zoomlevel " +
 							"from utenti "+
 							"where userid=? and pwd=?";
 
@@ -279,6 +314,11 @@ public class LoginBean implements Serializable, SWH4EConst{
 					livello=dsm.getInteger(1);
 					id=dsm.getInteger(2);
 					id_dominio = dsm.getInteger(3);
+					id_user = id;
+					center_x = dsm.getDouble(4);
+					center_y = dsm.getDouble(5);
+					zoomfactor = dsm.getDouble(6);
+
 
 					System.out.println("LoginBean - main - utente trovato, livello: "+dsm.getInteger(1));
 				}else{
@@ -298,6 +338,8 @@ public class LoginBean implements Serializable, SWH4EConst{
 			}
 
 		}
+
+
 
 		if(loggedIn){
 			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Benvenuto", username);
@@ -429,11 +471,13 @@ public class LoginBean implements Serializable, SWH4EConst{
 					dsm = new TDBManager("jdbc/urbandb");
 					
 					System.out.println("LoginBean - main - connessione aperta");
-					
-					String sqlString="select livello,id_utente, id_domain " +
-								"from utenti "+
-								"where userid='guest' and pwd='guest'";
-			
+
+					String sqlString="select livello, id_utente, "+
+							"id_domain, ST_X(center), ST_Y(center), zoomlevel " +
+							"from utenti "+
+							"where userid='guest' and pwd='guest'";
+
+
 					dsm.setPreparedStatementRef(sqlString);
 					
 					dsm.runPreparedQuery();
@@ -445,8 +489,14 @@ public class LoginBean implements Serializable, SWH4EConst{
 						livello=dsm.getInteger(1);
 						id=dsm.getInteger(2);
 						id_dominio = dsm.getInteger(3);
+						this.id_user = id;
+						center_x = dsm.getDouble(4);
+						center_y = dsm.getDouble(5);
+						zoomfactor = dsm.getDouble(6);
+
+
 						login_where = "login_urban";
-						System.out.println("LoginBean - main - utente trovato, livello: "+dsm.getInteger(1));
+						System.out.println("LoginBean - main - utente trovato, livello: "+dsm.getInteger(1)+ " id: "+dsm.getString(2));
 					}else{
 						loggedIn=false;
 						newLogin=-1;
@@ -486,8 +536,9 @@ public class LoginBean implements Serializable, SWH4EConst{
 					newLogin=AGROMETEOLOGIN;
 					livello=dsm.getInteger(2);
 					id=dsm.getInteger(1);
+					id_user = id;
 					login_where = "login_agro";
-					System.out.println("LoginBean - main - utente trovato, livello: "+dsm.getInteger(2));
+					System.out.println("LoginBean - main - utente trovato, livello: "+dsm.getInteger(2)+ " id: "+dsm.getString(2));
 				}else{
 					loggedIn=false;
 					newLogin=-1;
@@ -529,9 +580,10 @@ public class LoginBean implements Serializable, SWH4EConst{
 						newLogin=RENEWABLELOGIN;
 						livello=dsm.getInteger(1);
 						id=dsm.getInteger(2);
+						id_user = id;
 						id_dominio = RENEWABLELOGIN; //dsm.getInteger(3);
 						login_where = "login_renew";
-						System.out.println("LoginBean - main - utente trovato, livello: "+dsm.getInteger(1));
+						System.out.println("LoginBean - main - utente trovato, livello: "+dsm.getInteger(1)+ " id: "+dsm.getString(2));
 					}else{
 						loggedIn=false;
 						newLogin=-1;
@@ -572,8 +624,10 @@ public class LoginBean implements Serializable, SWH4EConst{
 		FacesContext.getCurrentInstance().addMessage(null, msg);  
 		
 		
-        context.addCallbackParam("loggedIn", loggedIn);  
-        
+        context.addCallbackParam("loggedIn", loggedIn);
+
+
+
         if(loggedIn){
         	this.logged=true;
         	this.loggedout=false;
@@ -638,11 +692,13 @@ public class LoginBean implements Serializable, SWH4EConst{
 					dsm = new TDBManager("jdbc/urbandb");
 					
 					System.out.println("LoginBean - main - connessione aperta");
-					
-					String sqlString="select livello,id_utente, id_domain " +
-								"from utenti "+
-								"where userid='guest' and pwd='guest'";
-			
+
+					String sqlString="select livello, id_utente, "+
+							"id_domain, ST_X(center), ST_Y(center), zoomlevel " +
+							"from utenti "+
+							"where userid='guest' and pwd='guest'";
+
+
 					dsm.setPreparedStatementRef(sqlString);
 					
 					dsm.runPreparedQuery();
@@ -657,6 +713,12 @@ public class LoginBean implements Serializable, SWH4EConst{
 						id=dsm.getInteger(2);
 						login_where = "login_urban";
 						id_dominio = dsm.getInteger(3);
+
+
+						center_x = dsm.getDouble(4);
+						center_y = dsm.getDouble(5);
+						zoomfactor = dsm.getDouble(6);
+
 						System.out.println("LoginBean - main - utente trovato, livello: "+dsm.getInteger(1));
 					}else{
 						loggedIn=false;
@@ -847,11 +909,12 @@ public class LoginBean implements Serializable, SWH4EConst{
 					dsm = new TDBManager("jdbc/urbandb");
 					
 					System.out.println("LoginBean - main - connessione aperta");
-					
-					String sqlString="select livello,id_utente,id_domain " +
-								"from utenti "+
-								"where userid=? and pwd=?";
-			
+
+					String sqlString="select livello, id_utente, "+
+							"id_domain, ST_X(center), ST_Y(center), zoomlevel " +
+							"from utenti "+
+							"where userid=? and pwd=?";
+
 					dsm.setPreparedStatementRef(sqlString);
 					dsm.setParameter(ParameterType.STRING, username, 1);
 					dsm.setParameter(ParameterType.STRING, password, 2);
@@ -864,8 +927,19 @@ public class LoginBean implements Serializable, SWH4EConst{
 						livello=dsm.getInteger(1);
 						login_where = "login_urban";
 						id=dsm.getInteger(2);
-                                                id_dominio = dsm.getInteger(3);
+						id_dominio = dsm.getInteger(3);
+
+						id_user = id;
+
+						center_x = dsm.getDouble(4);
+						center_y = dsm.getDouble(5);
+						zoomfactor = dsm.getDouble(6);
+
+
 						System.out.println("LoginBean - main - utente trovato, livello: "+dsm.getInteger(1));
+						System.out.println("LoginBean - center: "+center_x+", "+center_y);
+						System.out.println("LoginBean - zoom: "+zoomfactor);
+
 					}else{
 						loggedIn=false;
 						newLogin=-1;
@@ -905,6 +979,7 @@ public class LoginBean implements Serializable, SWH4EConst{
 					newLogin=AGROMETEOLOGIN;
 					livello=dsm.getInteger(2);
 					id=dsm.getInteger(1);
+					id_user = id;
 					login_where = "login_agro";
 					System.out.println("LoginBean - main - utente trovato, livello: "+dsm.getInteger(2));
 				}else{
@@ -939,13 +1014,14 @@ public class LoginBean implements Serializable, SWH4EConst{
 
 
                         if(dsm.next()){
-                                loggedIn=true;
-                                newLogin=RENEWABLELOGIN;
-                                livello=dsm.getInteger(1);
-                                id=dsm.getInteger(2);
+							loggedIn=true;
+							newLogin=RENEWABLELOGIN;
+							livello=dsm.getInteger(1);
+							id=dsm.getInteger(2);
 							login_where = "login_renwe";
-                                id_dominio = RENEWABLELOGIN; //dsm.getInteger(3);
-                                System.out.println("LoginBean - main - utente trovato, livello: "+dsm.getInteger(1));
+							id_user = id;
+							id_dominio = RENEWABLELOGIN; //dsm.getInteger(3);
+							System.out.println("LoginBean - main - utente trovato, livello: "+dsm.getInteger(1));
                         }else{
                                 loggedIn=false;
                                 newLogin=-1;
@@ -986,8 +1062,8 @@ public class LoginBean implements Serializable, SWH4EConst{
 		FacesContext.getCurrentInstance().addMessage(null, msg);  
 		
 		
-        context.addCallbackParam("loggedIn", loggedIn);  
-        
+        context.addCallbackParam("loggedIn", loggedIn);
+
         if(loggedIn){
         	this.logged=true;
         	this.loggedout=false;
@@ -1115,6 +1191,7 @@ public class LoginBean implements Serializable, SWH4EConst{
 		this.doIndor = false;
 		this.doMeteo = false;
 		this.doUrban = false;
+
 
 		FacesMessage msg = null;
 		FacesContext fcontext = FacesContext.getCurrentInstance();

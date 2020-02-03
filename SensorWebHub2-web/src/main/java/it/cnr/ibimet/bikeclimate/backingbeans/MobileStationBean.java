@@ -114,15 +114,16 @@ public class MobileStationBean implements Serializable {
 			System.out.println("MobilestationBean - main - connessione aperta");
 		
 			
-			String sqlString="select id_mobile_station, nome, img, descrizione, activated " +
-                                "from mobile_stations a, station_types b " +
-                                "where a.id_station_type=b.id_station_type and id_domain=? and b.tipo "+clausulaWhere+" order by 5 desc,2 asc";
+			String sqlString="select a.id_mobile_station, nome, img, descrizione, activated " +
+                                "from mobile_stations a, station_types b, utenti_stations us " +
+                                "where us.id_utente=? and a.id_mobile_station= us.id_mobile_station and a.id_station_type=b.id_station_type and id_domain=? and b.tipo "+clausulaWhere+" order by 5 desc,2 asc";
 			
                         System.out.println("ecoc la query: "+sqlString);
                         
                         
 			dsm.setPreparedStatementRef(sqlString);
-			dsm.setParameter(ParameterType.INT, ""+loginBean.getId_dominio(), 1);
+			dsm.setParameter(ParameterType.INT, ""+loginBean.getId_user(), 1);
+			dsm.setParameter(ParameterType.INT, ""+loginBean.getId_dominio(), 2);
 			dsm.runPreparedQuery();
 			mobilestationlist = new ArrayList<MobileStation>();
 //			mobilestationlist2 = new ArrayList<MobileStation>();
